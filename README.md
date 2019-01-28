@@ -1,23 +1,19 @@
 # String to Image Encryption
-## Created By
-* **Derrick Neal** 
-* **Daniel Loyd**
-* **Holly Hardin**
+## Created By **Derrick Neal**, **Daniel Loyd**, **Holly Hardin**.
 
 
-### Abstract
+## Abstract
 ```
-Abstract
+Introductionary Information
 ```
 ### Encryption Protocol
 ```
-Stuff
+Our Ecnryption Protocol
 ```
 ### Decryption Protocol
 ```
-Stuff
+Our Decryption Protocol
 ```
-
 ### Resources Used
 * 
 * 
