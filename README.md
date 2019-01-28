@@ -3,12 +3,10 @@
 
 
 ## Abstract
-```
 Introductionary Information
-```
 ### Encryption Protocol
 ```
-Our Ecnryption Protocol
+Our Encryption Protocol
 ```
 ### Decryption Protocol
 ```
