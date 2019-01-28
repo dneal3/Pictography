@@ -1,8 +1,11 @@
 # String to Image Encryption
+## Created By
+* **Derrick Neal** 
+* **Daniel Loyd**
+* **Holly Hardin**
 
-## Breakdown
 
-### How Does it Work?
+### Abstract
 ```
 Abstract
 ```
@@ -14,4 +17,10 @@ Stuff
 ```
 Stuff
 ```
+
+### Resources Used
+* 
+* 
+
+#### Aknowledgements
 
