@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 2.8.12.1)
+PROJECT(DataWriter CXX)
+SET(VTK_DIR ~/VTK/VTK-8.1.2)
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
+add_executable(writer MACOSX_BUNDLE DataWriter)
+set(CMAKE_CXX_FLAGS "-Wall")
+if(VTK_LIBRARIES)
+  target_link_libraries(writer ${VTK_LIBRARIES})
+else()
+  target_link_libraries(writer vtkHybrid)
+endif()
+
