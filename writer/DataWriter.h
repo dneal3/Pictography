@@ -45,7 +45,6 @@ void DataWriter::write(std::vector<double> colors, std::vector<std::pair<double,
 	{
         	const int ptsLen = pointsIn.size();
 		if(ptsLen%3 != 0){throw myErr.SetErr(INVALIDNUMPTS);}//throw invalidData(); } 	//ensure there are enough points to build entirely whole triangles with the data
-		int numTris = ptsLen/3;
 		double ptLocs[3];
 		vtkIdType vertices[3];
 		for(i=0; i<ptsLen; i+=3)
