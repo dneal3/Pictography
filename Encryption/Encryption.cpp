@@ -6,7 +6,6 @@
 //
 
 #include "Encryption.hpp"
-#include <stdlib.h>
 
 //Define Encryption Methods
 
@@ -14,7 +13,7 @@
 Encryption::Encryption(void)
 {
     //ask for user input to get the string to decrpyt
-    String userData;
+    std::string userData;
     char isCorrect;
     std::cout << "Please enter the phrase you like to encrypt: " << std::endl;
     std::cin >> userData;
@@ -30,35 +29,29 @@ Encryption::Encryption(void)
         std::cin >> isCorrect;
     }
     
-    this.dataToEncrypt = userData;
+    this->dataToEncrypt = userData;
 }
 
 //Constructor 2 with data given
 Encryption::Encryption(std::string data)
 {
-    std::string newData = strdup(data);
-    this.dataToEncrypt = newData;
+    this->dataToEncrypt = data;
 }
 
+//Standard Destructor deletes
 Encryption::~Encryption(void)
 {
-    delete this.dataToEncrypt;
-    delete this.colors;
-    delete this.key;
+    delete this->colors;
 }
 
-String Encryption::getKey()
-{
-    return this.key;
-}
 
-Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEven)
+std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEven)
 {
     // do operations on the dataToEncrypt to decide how to make the key
     //determine odd or even using rand?
     int newChar;
     char buffer[2];
-    string keyString;
+    std::string keyString;
     
     // key will be 32 bits
     //if even
@@ -81,24 +74,24 @@ Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEven)
             switch(i)
             {
                 case 3:
-                    itoa(offsetr, buffer, 10);
-                    keyString.append(buffer[0]);
+                    sprintf(buffer, "%d", offsetr);
+                    keyString.append(buffer);
                     break;
                 
                 case 10:
-                    itoa(offsetg, buffer, 10);
-                    keyString.append(buffer[0]);
+                    sprintf(buffer, "%d", offsetg);
+                    keyString.append(buffer);
                     break;
                     
                 case 15:
-                    itoa(offsetb, buffer, 10);
-                    keyString.append(buffer[0]);
+                    sprintf(buffer, "%d", offsetb);
+                    keyString.append(buffer);
                     break;
                     
                 default:
                     newChar = (rand() % 95) + 32;
-                    itoa(newChar, buffer, 10);
-                    keyString.append(buffer[0]);
+                    sprintf(buffer, "%d", newChar);
+                    keyString.append(buffer);
                     break;
             }
         }
@@ -110,52 +103,57 @@ Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEven)
             switch(i) //puts the information in the right place
             {
                 case 5:
-                    itoa(offsetg, buffer, 10);
-                    keyString.append(buffer[0]);
+                    sprintf(buffer, "%d", offsetg);
+                    keyString.append(buffer[0], 1);
                     break;
                     
                 case 13:
-                    itoa(offsetr, buffer, 10);
-                    keyString.append(buffer[0]);
+                    sprintf(buffer, "%d", offsetr);
+                    keyString.append(buffer[0], 1);
                     break;
                             
                 case 16:
-                    itoa(offsetb, buffer, 10);
-                    keyString.append(buffer[0]);
+                    sprintf(buffer, "%d", offsetb);
+                    keyString.append(buffer[0], 1);
                     break;
                             
                 default:
                     newChar = (rand() % 95) + 32;
-                    itoa(newChar, buffer, 10);
-                    keyString.append(buffer[0]);
+                    sprintf(buffer, "%d", newChar);
+                    keyString.append(buffer[0], 1);
                     break;
             }
         }
     }
+    return keyString;
 }
 
    
     
 
-Encryption::doEncryption(this)
+void Encryption::doEncryption()
 {
-    int numChars = this.dataToEncrypt.size();
+    int numChars = this->dataToEncrypt.size();
     if(numChars % 3 == 2)
     {
         numChars++;
-        this.dataToEncrypt += ' ';
+        this->dataToEncrypt += ' ';
     }
     else if(numChars % 3 == 1)
     {
         numChars+=2;
-        this.dataToEncrypt += ' ';
-        this.dataToEncrypt += ' '; //this might not work
+        this->dataToEncrypt += ' ';
+        this->dataToEncrypt += ' '; //this might not work
         
     }
     
     int numColors = numChars * 3; //numchars * 3 so we have 3 color channels per char
     
-    double this.colors = new double[numChars+1];
+    this->colors = new double[numChars+1];
+    
+    //offsetr r = rand() mod 100
+    //offsetg g = rand() mod (100-r)
+    //offsetb b = 100 - (r+g)
     
     int oddOrEven = (rand() % 2); // decide if odd or even
     int offsetr = (rand() % (100));// rand value between 32 and 99
@@ -168,38 +166,54 @@ Encryption::doEncryption(this)
     
     if(oddOrEven)
     {
-        for(int i = 0; i < numChars; i++)
+        for(int i = 0; i < numChars; i+=3)
         {
+            //in the picture we drew dots were V1,
+            // 0  1  2  3  4  5  6  7  8
+            // R1 R2 R3 G3 G1 G2 B3 B2 B1
+            int colorindex = i * 9;
             
+            this->colors[colorindex] = atoi(&(this->dataToEncrypt[i])) * offsetr;
+            this->colors[colorindex+4] = atoi(&(this->dataToEncrypt[i])) * offsetg;
+            this->colors[colorindex+8] = atoi(&(this->dataToEncrypt[i])) * offsetb;
+            
+            this->colors[colorindex+1] = atoi(&(this->dataToEncrypt[i+1])) * offsetr;
+            this->colors[colorindex+5] = atoi(&(this->dataToEncrypt[i+1])) * offsetg;
+            this->colors[colorindex+7] = atoi(&(this->dataToEncrypt[i+1])) * offsetb;
+            
+            this->colors[colorindex+2] = atoi(&(this->dataToEncrypt[i+2])) * offsetr;
+            this->colors[colorindex+3] = atoi(&(this->dataToEncrypt[i+2])) * offsetg;
+            this->colors[colorindex+6] = atoi(&(this->dataToEncrypt[i+2])) * offsetb;
         }
         
     }
     else if(!oddOrEven)
     {
-        for(int i = 0; i < numChars; i++)
+        for(int i = 0; i < numChars; i+=3)
         {
-            // three chars at once
+            // 0  1  2  3  4  5  6  7  8
+            // R2 R3 R1 G1 G2 G3 B3 B1 B2
+            int colorindex = i * 9;
             
+            this->colors[colorindex+2] = atoi(&(this->dataToEncrypt[i])) * offsetr;
+            this->colors[colorindex+3] = atoi(&(this->dataToEncrypt[i])) * offsetg;
+            this->colors[colorindex+7] = atoi(&(this->dataToEncrypt[i])) * offsetb;
+            
+            this->colors[colorindex] = atoi(&(this->dataToEncrypt[i+1])) * offsetr;
+            this->colors[colorindex+4] = atoi(&(this->dataToEncrypt[i+1])) * offsetg;
+            this->colors[colorindex+8] = atoi(&(this->dataToEncrypt[i+1])) * offsetb;
+            
+            this->colors[colorindex+1] = atoi(&(this->dataToEncrypt[i+2])) * offsetr;
+            this->colors[colorindex+5] = atoi(&(this->dataToEncrypt[i+2])) * offsetg;
+            this->colors[colorindex+6] = atoi(&(this->dataToEncrypt[i+2])) * offsetb;
         }
         
     }
-    //make numColors mod 3 == 0 always prolly use a switch if it matters could init to -1 so you know the data isn't relevant
-   
     
     
-    //offsetr r = rand() mod 100
-    //offsetg g = rand() mod (100-r)
-    //offsetb b = 100 - (r+g)
-    //offset could manipulate this
+    this->key = this->generateKey(offsetr, offsetg, offsetb, oddOrEven);
+    printf("%s\n", this->key.c_str());
     
-    //might want to return the Key so that QT can print it in the UI prolly just return in string format.
-    
-    // odd or even will change the way colors get added to vertices, like even is v1r = red1 , v2g = green1
-    // look at picture on ur phone
-    //oddoreven % 2 is triangle offset
-    
-    
-    this.key = this.generateKey(offsetr, offsetg, offsetb, oddOrEven);
     
     //return key?
 
@@ -208,5 +222,9 @@ Encryption::doEncryption(this)
 
 int main(void)
 {
+    Encryption encryp;
+    
+    encryp.doEncryption();
+    
     return 0;
 }

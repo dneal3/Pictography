@@ -9,8 +9,9 @@
 #define Encryption_hpp
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
-#include <string>
+#include <string.h>
 
 class Encryption
 {
@@ -18,13 +19,14 @@ class Encryption
     std::string dataToEncrypt;
     double* colors;
     
-    Encryption(void);
-    Encryption(std::string data);
-    ~Encryption();
-    void generateKey(int offsetr, int offsetg, int offsetb, int oddeven ); //Might want to return key and just use it in doEncryption.
-    void doEncryption();
-    void setKey(std::string newkey) {this.key = newkey;};
-    std::string getKey() {return this.key;};
+    std::string generateKey(int offsetr, int offsetg, int offsetb, int oddeven); //Might want to return key and just use it in doEncryption.
+    public:
+        Encryption(void);
+        Encryption(std::string data);
+        ~Encryption();
+        void doEncryption();
+        void setKey(std::string newkey) {this->key = newkey;};
+        std::string getKey() {return this->key;};
     
 };
 
