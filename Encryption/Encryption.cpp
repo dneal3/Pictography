@@ -14,19 +14,32 @@ Encryption::Encryption(void)
 {
     //ask for user input to get the string to decrpyt
     std::string userData;
-    char isCorrect;
+    std::string isCorrect;
     std::cout << "Please enter the phrase you like to encrypt: " << std::endl;
-    std::cin >> userData;
+    std::getline(std::cin, userData);
     std::cout << "The phrase you just entered was " << userData << std::endl;
-    std::cout << "Is this correct (y/n)" << std::endl;
-    std::cin >> isCorrect;
-    if(isCorrect == 'n')
+    std::cout << "Is this phrase correct?(y/n)" << std::endl;
+    std::getline(std::cin, isCorrect);
+    while((isCorrect != "y") && (isCorrect != "n"))
+    {
+        std::cout << "The phrase you just entered was " << userData << std::endl;
+        std::cout << "Please use only y or n to indicate if this is the phrase you entered.\n Is this phrase correct?(y/n)" << std::endl;
+        std::getline(std::cin, isCorrect);
+
+    }
+    while(isCorrect != "y")
     {
         std::cout << "Please re-enter the phrase you like to encrypt: " << std::endl;
-        std::cin >> userData;
+        std::getline(std::cin, userData);
         std::cout << "The phrase you just entered was " << userData << std::endl;
-        std::cout << "Is this correct (y/n)" << std::endl;
-        std::cin >> isCorrect;
+        std::cout << "Is this phrase correct?(y/n)" << std::endl;
+        std::getline(std::cin, isCorrect);
+        while((isCorrect != "y") && (isCorrect != "n"))
+        {
+            std::cout << "The phrase you just entered was " << userData << std::endl;
+            std::cout << "Please use only y or n to indicate if this is the phrase you entered.\n Is this phrase correct?(y/n)" << std::endl;
+            std::getline(std::cin, isCorrect);
+        }
     }
     
     this->dataToEncrypt = userData;
@@ -35,6 +48,8 @@ Encryption::Encryption(void)
 //Constructor 2 with data given
 Encryption::Encryption(char* data)
 {
+    //this doesnt really work might just always need to have it input through std in
+    //could do file reading...
     this->dataToEncrypt = data;
 }
 
@@ -69,30 +84,32 @@ char* Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEv
     printf("key length %d\n", keylength);
     char* keyString = new char[keylength+1];
     
-    if(oddOrEven) // when it's even
+    if(!oddOrEven) // when it's even
     {
         for(int i = 0; i < keylength; i++)
         {
             switch(i)
             {
                 case 0:
-                    keyString[i] = (oddOrEven+32) + '0';
+                    keyString[0] = (oddOrEven+32) + '0';
                     break;
                 case 3:
                     //printf("%c\n", offsetr+'0');
                     //sprintf(buffer, "%c", (char)offsetr);
                     //printf("%c\n", buffer[0]);
-                    keyString[i] = offsetr+'0';
+                    keyString[3] = offsetr+'0';
+                    printf("%c\n", offsetr+'0');
+                    
                     break;
                 
                 case 10:
                     //sprintf(buffer, "%c", (char)offsetg);
-                    keyString[i] = offsetg+'0';
+                    keyString[10] = offsetg+'0';
                     break;
                     
                 case 15:
                     //sprintf(buffer, "%c", (char)offsetb);
-                    keyString[i] = offsetb + '0';
+                    keyString[15] = offsetb + '0';
                     break;
                     
                 default:
@@ -103,29 +120,30 @@ char* Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEv
             }
         }
     }
-    else if(!oddOrEven) // when it's even
+    else if(oddOrEven) // when it's odd
     {
         for(int i = 0; i < keylength; i++)
         {
             switch(i) //puts the information in the right place
             {
                 case 0:
-                    keyString[i] = (oddOrEven+32) + '0';
+                    keyString[0] = (oddOrEven+32) + '0';
                     break;
 
                 case 5:
                     //sprintf(buffer, "%c", (char)offsetg);
-                    keyString[i] = offsetg + '0';
+                    keyString[5] = offsetg + '0';
+                    //printf("%c\n", keyString[5]);
                     break;
                     
                 case 13:
                     //sprintf(buffer, "%c", (char)offsetr);
-                    keyString[i] = offsetr + '0';
+                    keyString[13] = offsetr + '0';
                     break;
                             
                 case 16:
                     //sprintf(buffer, "%c", (char)offsetb);
-                    keyString[i] = offsetr + '0';
+                    keyString[16] = offsetr + '0';
                     break;
                             
                 default:
@@ -142,10 +160,11 @@ char* Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEv
    
     
 
-void Encryption::doEncryption()
+double* Encryption::doEncryption()
 {
     srand(time(0));
     int numChars = this->dataToEncrypt.size();
+    printf("num chars is %d\n", numChars);
     if(numChars % 3 == 2)
     {
         numChars++;
@@ -159,14 +178,17 @@ void Encryption::doEncryption()
         
     }
     
-    int numColors = numChars * 3; //numchars * 3 so we have 3 color channels per char
+    printf("numChars after being made to mult of 3, %d\n", numChars);
     
-    this->colors = new double[numChars+1];
+    int numColors = numChars * 3; //numchars * 3 so we have 3 color channels per char
+    this->numColors = numColors;
+    
+    double* Newcolors = new double[numColors+1];
     
     //offsetr r = rand() mod 100
     //offsetg g = rand() mod (100-r)
     //offsetb b = 100 - (r+g)
-    
+    int c = 0;
     int oddOrEven = (rand() % 2); // decide if odd or even
     int offsetr = (rand() % (100));// rand value between 32 and 99
     int offsetg = (rand() % (100-offsetr));
@@ -185,58 +207,62 @@ void Encryption::doEncryption()
     printf("ratiog, %f\n", ratiog);
     printf("ratiob, %f\n", ratiob);
     
-    if(oddOrEven)
+    
+    if(!oddOrEven)
     {
         for(int i = 0; i < numChars; i+=3)
         {
             //in the picture we drew dots were V1,
             // 0  1  2  3  4  5  6  7  8
             // R1 R2 R3 G3 G1 G2 B3 B2 B1
-            int colorindex = i * 9;
+            int colorindex = c * 9;
             
-            this->colors[colorindex] = atoi(&(this->dataToEncrypt[i])) * offsetr;
-            this->colors[colorindex+4] = atoi(&(this->dataToEncrypt[i])) * offsetg;
-            this->colors[colorindex+8] = atoi(&(this->dataToEncrypt[i])) * offsetb;
+            Newcolors[colorindex] = (this->dataToEncrypt[i]) * ratior;
+            Newcolors[colorindex+4] = (this->dataToEncrypt[i]) * ratiog;
+            Newcolors[colorindex+8] = (this->dataToEncrypt[i]) * ratiob;
             
-            this->colors[colorindex+1] = atoi(&(this->dataToEncrypt[i+1])) * offsetr;
-            this->colors[colorindex+5] = atoi(&(this->dataToEncrypt[i+1])) * offsetg;
-            this->colors[colorindex+7] = atoi(&(this->dataToEncrypt[i+1])) * offsetb;
+            Newcolors[colorindex+1] = (this->dataToEncrypt[i+1]) * ratior;
+            Newcolors[colorindex+5] = (this->dataToEncrypt[i+1]) * ratiog;
+            Newcolors[colorindex+7] = (this->dataToEncrypt[i+1]) * ratiob;
             
-            this->colors[colorindex+2] = atoi(&(this->dataToEncrypt[i+2])) * offsetr;
-            this->colors[colorindex+3] = atoi(&(this->dataToEncrypt[i+2])) * offsetg;
-            this->colors[colorindex+6] = atoi(&(this->dataToEncrypt[i+2])) * offsetb;
+            Newcolors[colorindex+2] = (this->dataToEncrypt[i+2]) * ratior;
+            Newcolors[colorindex+3] = (this->dataToEncrypt[i+2]) * ratiog;
+            Newcolors[colorindex+6] = (this->dataToEncrypt[i+2]) * ratiob;
+            c++;
         }
         
     }
-    else if(!oddOrEven)
+    else if(oddOrEven)
     {
         for(int i = 0; i < numChars; i+=3)
         {
             // 0  1  2  3  4  5  6  7  8
             // R2 R3 R1 G1 G2 G3 B3 B1 B2
-            int colorindex = i * 9;
+            int colorindex = c * 9;
             
-            this->colors[colorindex+2] = atoi(&(this->dataToEncrypt[i])) * offsetr;
-            this->colors[colorindex+3] = atoi(&(this->dataToEncrypt[i])) * offsetg;
-            this->colors[colorindex+7] = atoi(&(this->dataToEncrypt[i])) * offsetb;
+            Newcolors[colorindex+2] = (this->dataToEncrypt[i]) * ratior;
+            Newcolors[colorindex+3] = (this->dataToEncrypt[i]) * ratiog;
+            Newcolors[colorindex+7] = (this->dataToEncrypt[i]) * ratiob;
             
-            this->colors[colorindex] = atoi(&(this->dataToEncrypt[i+1])) * offsetr;
-            this->colors[colorindex+4] = atoi(&(this->dataToEncrypt[i+1])) * offsetg;
-            this->colors[colorindex+8] = atoi(&(this->dataToEncrypt[i+1])) * offsetb;
+            Newcolors[colorindex] = (this->dataToEncrypt[i+1]) * ratior;
+            Newcolors[colorindex+4] = (this->dataToEncrypt[i+1]) * ratiog;
+            Newcolors[colorindex+8] = (this->dataToEncrypt[i+1]) * ratiob;
             
-            this->colors[colorindex+1] = atoi(&(this->dataToEncrypt[i+2])) * offsetr;
-            this->colors[colorindex+5] = atoi(&(this->dataToEncrypt[i+2])) * offsetg;
-            this->colors[colorindex+6] = atoi(&(this->dataToEncrypt[i+2])) * offsetb;
+            Newcolors[colorindex+1] = (this->dataToEncrypt[i+2]) * ratior;
+            Newcolors[colorindex+5] = (this->dataToEncrypt[i+2]) * ratiog;
+            Newcolors[colorindex+6] = (this->dataToEncrypt[i+2]) * ratiob;
+            c++;
         }
         
     }
     
     
     this->key = this->generateKey(offsetr, offsetg, offsetb, oddOrEven);
+    this->colors = Newcolors;
     printf("%s\n", this->key);
     
     
-    //return key?
+    return Newcolors;
 
     
 }
@@ -244,13 +270,33 @@ void Encryption::doEncryption()
 int main(int argc, char* argv[])
 {
     Encryption encryp;
-    encryp.doEncryption();
+    double* colorBuffer;
+    colorBuffer = encryp.doEncryption();
     
     char* keysmurf = encryp.getKey();
+    int colors = encryp.getNumColors();
     
     int oddOrEvenFlag = (keysmurf[0] - '0') - 32;
     printf("odd or even %d\n", oddOrEvenFlag);
     
+    for(int i=0; i<colors; i++)
+    {
+        printf("Color %d is %f\n", i, colorBuffer[i]);
+    }
+    
+    if(!oddOrEvenFlag){
+        printf("%d\n", (keysmurf[0] - '0')-32);
+        printf("%d\n", keysmurf[3] - '0');
+        printf("%d\n", keysmurf[10] - '0');
+        printf("%d\n", keysmurf[15] - '0');
+    }
+    else{
+        printf("%d\n", (keysmurf[0] - '0')-32);
+        printf("%d\n", keysmurf[5] - '0');
+        printf("%d\n", keysmurf[13] - '0');
+        printf("%d\n", keysmurf[16] - '0');
+    }
+
     
     
     return 0;

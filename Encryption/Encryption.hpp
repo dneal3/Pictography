@@ -16,6 +16,7 @@
 class Encryption
 {
     char* key;
+    int numColors;
     std::string dataToEncrypt;
     double* colors;
     
@@ -24,8 +25,9 @@ class Encryption
         Encryption(void);
         Encryption(char* data);
         ~Encryption();
-        void doEncryption();
+        double* doEncryption();
         char* getKey() {return this->key;};
+        int getNumColors() {return this->numColors;};
     
 };
 
