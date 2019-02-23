@@ -25,6 +25,7 @@ std::string Decrypter::Decrypt(std::vector<double> colors, std::vector<std::pair
 	if(this->key == NULL)
 	{
 		std::cerr << "no key input detected. Exiting to avoid crash." << std::endl;
+		return std::string();	//caller checks for empty string on other end
 	}
 	//TODO DECRYPT AND RETURN STRING HERE
 	return std::string();
