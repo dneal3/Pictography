@@ -1,3 +1,0 @@
-Computer security, cybersecurity[1] or information technology security (IT security) is the protection of computer systems from theft or damage to their hardware, software or electronic data, as well as from disruption or misdirection of the services they provide.
-
-The field is growing in importance due to increasing reliance on computer systems, the Internet[2] and wireless networks such as Bluetooth and Wi-Fi, and due to the growth of "smart" devices, including smartphones, televisions and the various tiny devices that constitute the Internet of things. Due to its complexity, both in terms of politics and technology, it is also one of the major challenges of the contemporary world.[3]
