@@ -52,7 +52,6 @@ void DataWriter::write(std::vector<double> colorsIn, std::vector<std::pair<doubl
 
 	const int colorsSize = colorsIn.size();
         const int ptsLen = pointsIn.size();
-
 	try
 	{
 		if(ptsLen%3 != 0){throw myErr.SetErr(INVALIDNUMPTS);} //ensure there are enough points to build entirely whole triangles with the data

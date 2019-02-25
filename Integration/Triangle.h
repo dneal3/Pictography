@@ -12,6 +12,7 @@ class Triangle
       // Variables
       double X[3];
       double Y[3];
+      double Z[3];
       unsigned char color[3];
       direction d;
       double slope[2];

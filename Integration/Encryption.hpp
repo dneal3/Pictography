@@ -265,7 +265,6 @@ double* Encryption::doEncryption()
     
     }   
     
-    
     this->key = this->generateKey(offsetr, offsetg, offsetb, oddOrEven);
     this->colors = Newcolors;
     printf("%s\n", this->key);

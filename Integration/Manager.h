@@ -59,7 +59,7 @@ void Manager::WriteData()
 void Manager::Rasterize()
 {
     DataReader reader;
-    Rasterization rasterize(reader.GetTriangles());
+    Rasterization rasterize(reader.read("output.vtk"));
 }
 
 void Manager::Decrypt()
