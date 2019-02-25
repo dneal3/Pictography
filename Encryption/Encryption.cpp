@@ -6,13 +6,14 @@
 //
 
 #include "Encryption.hpp"
+#define TESTING 1
 
 //Define Encryption Methods
 
 //Constructor 1 without data given
 Encryption::Encryption(void)
 {
-    //ask for user input to get the string to decrpyt
+    //ask for user input to get the string to decrpyt only really for testing
     std::string userData;
     std::string isCorrect;
     std::cout << "Please enter the phrase you like to encrypt: " << std::endl;
@@ -46,7 +47,7 @@ Encryption::Encryption(void)
 }
 
 //Constructor 2 with data given
-Encryption::Encryption(char* data)
+Encryption::Encryption(std::string data)
 {
     //this doesnt really work might just always need to have it input through std in
     //could do file reading...
@@ -60,19 +61,16 @@ Encryption::~Encryption(void)
 }
 
 
-char* Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEven)
+std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEven)
 {
     srand(time(0));
-    // do operations on the dataToEncrypt to decide how to make the key
-    //determine odd or even using rand?
     int newChar;
     char buffer[2];
     
-    // key will be 32 bits
     //if even
     //offsetr will be at index[3]
     //offsetg will be at index[10]
-    //offsetb will be at index[15] doesnt neccessarily need to be included as it can be infered
+    //offsetb will be at index[15]
     
     //if odd
     //offsetr will be at index[13]
@@ -80,8 +78,7 @@ char* Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEv
     //offsetb will be at index[16]
 
     // how to determine other values
-    int keylength = (rand() % (17)) + 16; // different sized keys! 32-64
-    printf("key length %d\n", keylength);
+    int keylength = 32; // different sized keys! 32-64
     char* keyString = new char[keylength+1];
     
     if(!oddOrEven) // when it's even
@@ -94,27 +91,19 @@ char* Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEv
                     keyString[0] = (oddOrEven+32) + '0';
                     break;
                 case 3:
-                    //printf("%c\n", offsetr+'0');
-                    //sprintf(buffer, "%c", (char)offsetr);
-                    //printf("%c\n", buffer[0]);
                     keyString[3] = offsetr+'0';
-                    printf("%c\n", offsetr+'0');
-                    
                     break;
                 
                 case 10:
-                    //sprintf(buffer, "%c", (char)offsetg);
                     keyString[10] = offsetg+'0';
                     break;
                     
                 case 15:
-                    //sprintf(buffer, "%c", (char)offsetb);
                     keyString[15] = offsetb + '0';
                     break;
                     
                 default:
                     newChar = (rand() % 32) + 32; // made it look more natural
-                    //printf(buffer, "%c", (char)newChar);
                     keyString[i] = newChar + '0';
                     break;
             }
@@ -131,30 +120,25 @@ char* Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEv
                     break;
 
                 case 5:
-                    //sprintf(buffer, "%c", (char)offsetg);
                     keyString[5] = offsetg + '0';
-                    //printf("%c\n", keyString[5]);
                     break;
                     
                 case 13:
-                    //sprintf(buffer, "%c", (char)offsetr);
                     keyString[13] = offsetr + '0';
                     break;
                             
                 case 16:
-                    //sprintf(buffer, "%c", (char)offsetb);
-                    keyString[16] = offsetr + '0';
+                    keyString[16] = offsetb + '0';
                     break;
                             
                 default:
                     newChar = (rand() % 95) + 32;
-                    //sprintf(buffer, "%d", newChar);
                     keyString[i] = newChar + '0';
                     break;
             }
         }
     }
-    return keyString;
+    return std::string(keyString);
 }
 
    
@@ -164,7 +148,6 @@ double* Encryption::doEncryption()
 {
     srand(time(0));
     int numChars = this->dataToEncrypt.size();
-    printf("num chars is %d\n", numChars);
     if(numChars % 3 == 2)
     {
         numChars++;
@@ -174,13 +157,11 @@ double* Encryption::doEncryption()
     {
         numChars+=2;
         this->dataToEncrypt += ' ';
-        this->dataToEncrypt += ' '; //this might not work
+        this->dataToEncrypt += ' ';
         
     }
     
-    printf("numChars after being made to mult of 3, %d\n", numChars);
-    
-    int numColors = numChars * 3; //numchars * 3 so we have 3 color channels per char
+    int numColors = numChars * 3;
     this->numColors = numColors;
     
     double* Newcolors = new double[numColors+1];
@@ -188,25 +169,30 @@ double* Encryption::doEncryption()
     //offsetr r = rand() mod 100
     //offsetg g = rand() mod (100-r)
     //offsetb b = 100 - (r+g)
+    
     int c = 0;
-    int oddOrEven = (rand() % 2); // decide if odd or even
-    int offsetr = (rand() % (100));// rand value between 32 and 99
+    int oddOrEven = (rand() % 2);
+    int offsetr = (rand() % (100));
     int offsetg = (rand() % (100-offsetr));
     int offsetb = 100 - (offsetr + offsetg);
     
-    printf("oddOrEven is %d\n", oddOrEven);
-    printf("offsetr, %d\n", offsetr);
-    printf("offsetg, %d\n", offsetg);
-    printf("offsetb, %d\n", offsetb);
     
     double ratior = offsetr * .01;
     double ratiog = offsetg * .01;
     double ratiob = offsetb * .01;
     
-    printf("ratior, %f\n", ratior);
-    printf("ratiog, %f\n", ratiog);
-    printf("ratiob, %f\n", ratiob);
-    
+    if(TESTING)
+    {
+        printf("oddOrEven is %d\n", oddOrEven);
+     
+        printf("offsetr, %d\n", offsetr);
+        printf("offsetg, %d\n", offsetg);
+        printf("offsetb, %d\n", offsetb);
+        
+        printf("ratior, %f\n", ratior);
+        printf("ratiog, %f\n", ratiog);
+        printf("ratiob, %f\n", ratiob);
+    }
     
     if(!oddOrEven)
     {
@@ -256,15 +242,10 @@ double* Encryption::doEncryption()
         
     }
     
-    
     this->key = this->generateKey(offsetr, offsetg, offsetb, oddOrEven);
     this->colors = Newcolors;
-    printf("%s\n", this->key);
-    
-    
-    return Newcolors;
 
-    
+    return Newcolors;
 }
 
 int main(int argc, char* argv[])
@@ -272,29 +253,29 @@ int main(int argc, char* argv[])
     Encryption encryp;
     double* colorBuffer;
     colorBuffer = encryp.doEncryption();
-    
-    char* keysmurf = encryp.getKey();
-    int colors = encryp.getNumColors();
-    
-    int oddOrEvenFlag = (keysmurf[0] - '0') - 32;
-    printf("odd or even %d\n", oddOrEvenFlag);
-    
-    for(int i=0; i<colors; i++)
+
+    if(TESTING)
     {
-        printf("Color %d is %f\n", i, colorBuffer[i]);
-    }
-    
-    if(!oddOrEvenFlag){
-        printf("%d\n", (keysmurf[0] - '0')-32);
-        printf("%d\n", keysmurf[3] - '0');
-        printf("%d\n", keysmurf[10] - '0');
-        printf("%d\n", keysmurf[15] - '0');
-    }
-    else{
-        printf("%d\n", (keysmurf[0] - '0')-32);
-        printf("%d\n", keysmurf[5] - '0');
-        printf("%d\n", keysmurf[13] - '0');
-        printf("%d\n", keysmurf[16] - '0');
+        std::string keysmurf = encryp.getKey();
+        int colors = encryp.getNumColors();
+        int oddOrEvenFlag = (keysmurf[0] - '0') - 32;
+        for(int i=0; i<colors; i++)
+        {
+            printf("Color %d is %f\n", i, colorBuffer[i]);
+        }
+        if(!oddOrEvenFlag)
+        {
+            printf("%d\n", (keysmurf[0] - '0')-32);
+            printf("%d\n", keysmurf[3] - '0');
+            printf("%d\n", keysmurf[10] - '0');
+            printf("%d\n", keysmurf[15] - '0');
+        }
+        else{
+            printf("%d\n", (keysmurf[0] - '0')-32);
+            printf("%d\n", keysmurf[5] - '0');
+            printf("%d\n", keysmurf[13] - '0');
+            printf("%d\n", keysmurf[16] - '0');
+        }
     }
 
     
