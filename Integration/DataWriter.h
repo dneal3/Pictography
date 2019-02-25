@@ -57,7 +57,7 @@ void DataWriter::write(std::vector<double> colorsIn, std::vector<std::pair<doubl
 	{
 		if(ptsLen%3 != 0){throw myErr.SetErr(INVALIDNUMPTS);} //ensure there are enough points to build entirely whole triangles with the data
 		if(colorsSize%3 != 0){throw myErr.SetErr(INVALIDNUMTRIS);}	
-		if(colorsSize != ptsLen){throw myErr.SetErr(UNEQUALLENS);}
+		if((double)colorsSize/3 != ptsLen){throw myErr.SetErr(UNEQUALLENS);}
 		if(filename == nullptr || filename[0] == '\0'){throw myErr.SetErr(BADFILENAME);}
 		
 		colorsOut->SetNumberOfComponents(3);
