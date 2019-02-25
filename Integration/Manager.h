@@ -16,7 +16,6 @@ class Manager
       int oddOrEvenFlag;
       void Encrypt();
       void Decrypt();
-      void ReadData();
       void WriteData();
       void Rasterize();
 };
@@ -57,15 +56,10 @@ void Manager::WriteData()
     writer.write(vectorColorBuffer, vectorPoints, filename);
 }
 
-void Manager::ReadData()
+void Manager::Rasterize()
 {
     DataReader reader;
-    reader.read();
-}
-
-void Rasterize()
-{
-    Rasterization rasterize;
+    Rasterization rasterize(reader.GetTriangles());
 }
 
 void Manager::Decrypt()

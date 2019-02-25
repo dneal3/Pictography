@@ -11,5 +11,8 @@ int main(int argc, char* argv[])
     // Write data to .vtk file
     manager.WriteData();
 
+    // Read data from .vtk file and generate image
+    manager.Rasterize();
+
     return 0;
 }

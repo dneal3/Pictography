@@ -27,7 +27,7 @@ class DataReader
 std::vector<Triangle> DataReader::GetTriangles()
 {
     vtkPolyDataReader *rdr = vtkPolyDataReader::New();
-    rdr->SetFileName("proj1c_geometry.vtk");
+    rdr->SetFileName("output.vtk");
     cerr << "Reading" << endl;
     rdr->Update();
     if (rdr->GetOutput()->GetNumberOfCells() == 0)
@@ -64,11 +64,6 @@ std::vector<Triangle> DataReader::GetTriangles()
     }
     cerr << "Done reading" << endl;
     return tris;
-}
-
-void DataReader::read()
-{
-   triangles = GetTriangles();
 }
 
 #endif

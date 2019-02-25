@@ -23,4 +23,42 @@ class Triangle
       void SetDirection();
 };
 
+void Triangle::SetSlopes()
+{
+    slope[0] = GetSlope(X[0], X[1], Y[0], Y[1]);
+    slope[1] = GetSlope(X[0], X[2], Y[0], Y[2]);
+}
+
+void Triangle::SetOffsets()
+{
+    offset[0] = GetOffset(Y[1], slope[0], X[1]);
+    offset[1] = GetOffset(Y[2], slope[1], X[2]);
+}
+
+void Triangle::SetDirection()
+{
+     if ((Y[0] == Y[1] && Y[1] < Y[2]) ||
+         (Y[0] == Y[2] && Y[2] < Y[1]) ||
+         (Y[1] == Y[2] && Y[2] < Y[0]))
+     {
+          d = UP;
+     }
+     else if ((Y[0] == Y[1] && Y[2] < Y[1]) ||
+              (Y[0] == Y[2] && Y[1] < Y[2]) ||
+              (Y[1] == Y[2] && Y[0] < Y[2]))
+     {
+          d = DOWN;
+     }
+     else if ((X[0] == X[1] && X[1] < X[2]) ||
+              (X[0] == X[2] && X[2] < X[1]) ||
+              (X[1] == X[2] && X[2] < X[0]))
+     {
+          d = RIGHT;
+     }
+     else
+     {
+          d = ARBITRARY;
+     }
+}
+
 #endif
