@@ -41,6 +41,7 @@ void DataWriter::write(std::vector<double> colorsIn, std::vector<std::pair<doubl
 {
         int i, i2=0;
 	vtkDoubleArray *colorsOut = vtkDoubleArray::New();
+	vtkDoubleArray *hashOut = vtkDoubleArray::New();
         vtkPolyDataWriter *writer = vtkPolyDataWriter::New();
         vtkPolyData *tris = vtkPolyData::New();
         vtkPoints *points = vtkPoints::New();
@@ -48,6 +49,7 @@ void DataWriter::write(std::vector<double> colorsIn, std::vector<std::pair<doubl
         //vtkFloatArray *scalars = vtkFloatArray::New();
 	vtkIdType vertices[3];
 	double colorsToStore[3];
+	double hashToStore = 3.33333333;//TODO = Encryption::GetHash();
 	double ptLocs[3];
 
 	const int colorsSize = colorsIn.size();
@@ -60,6 +62,10 @@ void DataWriter::write(std::vector<double> colorsIn, std::vector<std::pair<doubl
 		if((double)colorsSize/3 != ptsLen){throw myErr.SetErr(UNEQUALLENS);}
 		if(filename == nullptr || filename[0] == '\0'){throw myErr.SetErr(BADFILENAME);}
 		
+		hashOut->SetNumberOfComponents(1);
+		hashOut->SetName("HASH");
+		hashOut->InsertNextTuple(&hashToStore);
+
 		colorsOut->SetNumberOfComponents(3);
 		colorsOut->SetName("COLORS");
 		for(i=0; i<colorsSize; i+=3)
