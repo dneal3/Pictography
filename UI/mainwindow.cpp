@@ -1,82 +1,35 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "../aux/validData.h"
+#include <QLabel> 
+#include <QHBoxLayout>
+#include <QCoreApplication>
+ 
+ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+ {
+    encrypt_button = new QPushButton("Encrypt", this);
 
+    // set size and location of the button
+    encrypt_button->setGeometry(QRect(QPoint(100, 50), QSize(200, 50)));
+ 
+    // Connect button signal to appropriate slot
+    connect(encrypt_button, SIGNAL (released()), this, SLOT (handleButton()));
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-    QLabel *temp = ui->EncryptionMenu->findChild<QLabel *>("OutKeyLabel");
-    temp->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    ui->EncryptionMenu->hide();
-}
+    // Create the button, make "this" the parent
+    decrypt_button = new QPushButton("Decrypt", this);
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+    // set size and location of the button
+    decrypt_button->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+ 
+    // Connect button signal to appropriate slot
+    connect(decrypt_button, SIGNAL (released()), this, SLOT (handleButton()));
 }
+ 
+ void MainWindow::handleButton()
+ {
+    encrypt_button->setVisible(false);
 
-void MainWindow::hideMainMenu()
-{
-    ui->pushButton->hide();
-    ui->pushButton_2->hide();
-}
-void MainWindow::showMainMenu()
-{
-    ui->pushButton->show();
-    ui->pushButton_2->show();
-}
+    decrypt_button->setVisible(false);
 
-void MainWindow::hideEncryptMenu()
-{
-    ui->EncryptionMenu->hide();
+    QLabel *label = new QLabel(this);
+    label->setText("Enter a string to encrypt");
+    label->showMaximized();
 }
-void MainWindow::showEncryptMenu()
-{
-    ui->EncryptionMenu->show();
-}
-void MainWindow::on_pushButton_clicked()
-{
-    this->hideMainMenu();
-    this->showEncryptMenu();
-}
-
-void MainWindow::on_pushButton_2_clicked()
-{
-    this->hideMainMenu();
-}
-
-void MainWindow::on_StartEncryption_clicked()
-{
-
-    QPlainTextEdit *temp = ui->EncryptionMenu->findChild<QPlainTextEdit *>("InStringTextEdit");
-    if(temp == nullptr || temp->toPlainText().isNull())
-    {
-        ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText("An unexpected error occured! Restart program");\
-        return ;
-    }
-    QString tempStr = temp->toPlainText();
-    if(tempStr.isEmpty())
-    {
-        ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText("Input text before running");
-        return ;
-    }
-    ValidData valididater(tempStr.toStdString());
-    if(!valididater.ValidateData())
-    {
-        ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText("Input text was invalid");
-        return ;
-    }
-    ui->EncryptionMenu->findChild<QLabel *>("PutOutKeyLabel")->setText(tempStr);
-    temp->clear();
-    ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText("Encryption complete!");
-}
-
-void MainWindow::on_BackButton_clicked()
-{
-    this->hideEncryptMenu();
-    this->showMainMenu();
-}
-
