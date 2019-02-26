@@ -1,5 +1,6 @@
 #ifndef DATAWRITER
 #define DATAWRITER
+#include "ErrorHandling.h"
 #include <iostream>
 #include <vector>
 #include <vtkCellArray.h>
@@ -10,26 +11,6 @@
 #include <vtkPointData.h>
 #include <vtkPoints.h>
 
-enum ErrorType{NOERR = 0, INVALIDNUMPTS, INVALIDNUMTRIS, UNEQUALLENS, BADFILENAME};
-class invalidData : public std::exception
-{
-	ErrorType errorCode;
-	public:
-	invalidData(void){this->errorCode = NOERR;}
-	invalidData SetErr(ErrorType err){errorCode = err; return *this;}
-	std::string errorMsg()
-	{
-		switch(errorCode)
-		{
-			case NOERR:	return "No error detected. Forgot to set errorCode? Contact Daniel for debugging";
-			case INVALIDNUMPTS: return "invalid number of triangles";
-			case INVALIDNUMTRIS: return "invalid number of color values, cannot fill all triangle vertices";
-			case UNEQUALLENS: return "number of colors did not match the number of points";
-			case BADFILENAME: return "bad filename detected, empty filename?";
-			default:	return "No valid ErrorType detected. Not sure how this happened, contact Daniel for debugging";
-		}
-	}
-} myErr;
 class DataWriter
 {
 	public:
