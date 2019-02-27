@@ -1,17 +1,17 @@
 #ifndef MANAGER
 #define MANAGER
 
-#include "Encryption.hpp"
-#include "Decryption.hpp"
-#include "DataWriter.h"
-#include "DataReader.h"
-#include "Rasterize.h"
+#include "aux/crypto/Encryption.hpp"
+#include "aux/crypto/Decryption.h"
+#include "aux/io/DataWriter.h"
+#include "aux/io/DataReader.h"
+#include "aux/imageCreation/ImageManager.h"
 
 class Manager
 {
    public:
       double *colors;
-      char *key;
+      std::string key;
       int numColors;
       int oddOrEvenFlag;
       void Encrypt();
@@ -48,7 +48,7 @@ void Manager::WriteData()
     std::vector<std::pair<double, double>> vectorPoints(numColors/3);
     for (int i = 0; i < (numColors/3); i++)
     {   
-       vectorPoints[i] = { 0, 1 };
+       vectorPoints[i] = { 2*vectorPoints[i-1].first + 50 + 3*i, 2*vectorPoints[i-1].second + 50 + 3*i };
     }   
 
     // Write data to output file
@@ -58,13 +58,13 @@ void Manager::WriteData()
 
 void Manager::Rasterize()
 {
-    DataReader reader;
-    Rasterization rasterize(reader.read("output.vtk"));
+    std::vector<Triangle> temp = DataReader::Read("output.vtk");
+    ImageManager::CreateImage(temp, "testOut");
 }
 
 void Manager::Decrypt()
 {
-    Decryption decrypt;
+    Decrypter decrypt;
 }
 
 #endif
