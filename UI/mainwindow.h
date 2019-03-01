@@ -18,6 +18,8 @@ public:
     void showMainMenu();
     void hideEncryptMenu();
     void showEncryptMenu();
+    void hideDecryptMenu();
+    void showDecryptMenu();
 
 private slots:
     void on_pushButton_clicked();
@@ -27,6 +29,10 @@ private slots:
     void on_StartEncryption_clicked();
 
     void on_BackButton_clicked();
+
+    void on_BackButton_2_clicked();
+
+    void on_StartDecryption_clicked();
 
 private:
     Ui::MainWindow *ui;

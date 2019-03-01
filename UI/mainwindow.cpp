@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     QLabel *temp = ui->EncryptionMenu->findChild<QLabel *>("OutKeyLabel");
     temp->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    ui->EncryptionMenu->findChild<QPushButton *>("viewButton")->setEnabled(false);
     ui->EncryptionMenu->hide();
+    ui->DecryptionMenu->hide();
 }
 
 MainWindow::~MainWindow()
@@ -20,13 +22,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::hideMainMenu()
 {
-    ui->pushButton->hide();
-    ui->pushButton_2->hide();
+    ui->MainMenuWidget->hide();
 }
 void MainWindow::showMainMenu()
 {
-    ui->pushButton->show();
-    ui->pushButton_2->show();
+    ui->MainMenuWidget->show();
 }
 
 void MainWindow::hideEncryptMenu()
@@ -36,6 +36,15 @@ void MainWindow::hideEncryptMenu()
 void MainWindow::showEncryptMenu()
 {
     ui->EncryptionMenu->show();
+
+}
+void MainWindow::hideDecryptMenu()
+{
+    ui->DecryptionMenu->hide();
+}
+void MainWindow::showDecryptMenu()
+{
+    ui->DecryptionMenu->show();
 }
 void MainWindow::on_pushButton_clicked()
 {
@@ -46,6 +55,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     this->hideMainMenu();
+    this->showDecryptMenu();
 }
 
 void MainWindow::on_StartEncryption_clicked()
@@ -71,7 +81,8 @@ void MainWindow::on_StartEncryption_clicked()
     }
     ui->EncryptionMenu->findChild<QLabel *>("PutOutKeyLabel")->setText(tempStr);
     temp->clear();
-    ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText("Encryption complete!");
+    ui->EncryptionMenu->findChild<QPushButton *>("viewButton")->setEnabled(true);
+    ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText("Encryption complete, view your encrypted image!");
 }
 
 void MainWindow::on_BackButton_clicked()
@@ -80,3 +91,34 @@ void MainWindow::on_BackButton_clicked()
     this->showMainMenu();
 }
 
+
+void MainWindow::on_BackButton_2_clicked()
+{
+    this->hideDecryptMenu();
+    this->showMainMenu();
+}
+
+void MainWindow::on_StartDecryption_clicked()
+{
+    QPlainTextEdit *temp = ui->DecryptionMenu->findChild<QPlainTextEdit *>("InStringTextEdit_Decrypt");
+    if(temp == nullptr || temp->toPlainText().isNull())
+    {
+        ui->DecryptionMenu->findChild<QLabel *>("ProgressLog_Decrypt")->setText("An unexpected error occured! Restart program");\
+        return ;
+    }
+    QString tempStr = temp->toPlainText();
+    if(tempStr.isEmpty())
+    {
+        ui->DecryptionMenu->findChild<QLabel *>("ProgressLog_Decrypt")->setText("Input text before running");
+        return ;
+    }
+    ValidData valididater(tempStr.toStdString());
+    if(!valididater.ValidateData())
+    {
+        ui->DecryptionMenu->findChild<QLabel *>("ProgressLog_Decrypt")->setText("Input text was invalid");
+        return ;
+    }
+    //TODO show decrypted string to person
+    temp->clear();
+    ui->DecryptionMenu->findChild<QLabel *>("ProgressLog_Decrypt")->setText("Encryption complete!");
+}
