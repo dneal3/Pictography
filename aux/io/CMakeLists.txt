@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 2.8.12.1)
+PROJECT(test CXX)
+SET(VTK_DIR ~/VTK/VTK-8.1.2)
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
+add_executable(writer_test MACOSX_BUNDLE test)
+set(CMAKE_CXX_FLAGS "-Wall")
+if(VTK_LIBRARIES)
+  target_link_libraries(writer_test ${VTK_LIBRARIES})
+else()
+  target_link_libraries(writer_test vtkHybrid)
+endif()
+
