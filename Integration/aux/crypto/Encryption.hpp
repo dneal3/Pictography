@@ -188,7 +188,7 @@ double* Encryption::doEncryption()
             
     }   
         
-    printf("numChars after being made to mult of 3, %d\n", numChars); 
+    printf("numChars after being made to mult of 3, %d\n", this->dataToEncrypt.size()); 
         
     int numColors = numChars * 3; //numchars * 3 so we have 3 color channels per char 
     this->numColors = numColors; 
