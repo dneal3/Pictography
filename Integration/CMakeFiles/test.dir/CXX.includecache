@@ -11,11 +11,17 @@ iostream
 -
 stdlib.h
 -
+stdio.h
+-
 string.h
 -
 string
 -
+../imageCreation/Triangle.h
+/Users/dloyd/Desktop/cis/433/encryptionProj/CIS433Project/Integration/aux/imageCreation/Triangle.h
 vector
+-
+math.h
 -
 
 /Users/dloyd/Desktop/cis/433/encryptionProj/CIS433Project/Integration/aux/crypto/Encryption.hpp

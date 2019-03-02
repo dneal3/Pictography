@@ -48,7 +48,8 @@ void Manager::WriteData()
     std::vector<std::pair<double, double>> vectorPoints(numColors/3);
     for (int i = 0; i < (numColors/3); i++)
     {   
-       vectorPoints[i] = { 2*vectorPoints[i-1].first + 50 + 3*i, 2*vectorPoints[i-1].second + 50 + 3*i };
+       //vectorPoints[i] = { 2*vectorPoints[i-1].first + 50 + 3*i, 2*vectorPoints[i-1].second + 50 + 3*i };
+       vectorPoints[i] = { 50*i + 3*i, 50*i + 3*i };
     }   
 
     // Write data to output file
@@ -64,7 +65,8 @@ void Manager::Rasterize()
 
 void Manager::Decrypt()
 {
-    Decrypter decrypt;
+    std::vector<Triangle> temp = DataReader::Read("output.vtk");
+    Decrypter::Decrypt(temp, key);
 }
 
 #endif

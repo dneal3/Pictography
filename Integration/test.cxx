@@ -14,5 +14,7 @@ int main(int argc, char* argv[])
     // Read data from .vtk file and generate image
     manager.Rasterize();
 
+    manager.Decrypt();
+
     return 0;
 }
