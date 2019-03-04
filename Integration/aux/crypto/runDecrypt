@@ -1,3 +1,0 @@
-g++ -o test test.cxx
-./test
-rm test
