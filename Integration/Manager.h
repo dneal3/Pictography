@@ -24,7 +24,6 @@ void Manager::Encrypt()
 {
     // Create an Encryption class
     Encryption encrypt;
-
     // Get the variables of the Manager object
     colors = encrypt.doEncryption();
     key = encrypt.getKey();
@@ -46,10 +45,13 @@ void Manager::WriteData()
 
     // Put doubles into vector for vertices
     std::vector<std::pair<double, double>> vectorPoints(numColors/3);
-    for (int i = 0; i < (numColors/3); i++)
+    vectorPoints[0] = {0,0};
+    for (int i = 1; i < (numColors/3); i+=3)
     {   
        //vectorPoints[i] = { 2*vectorPoints[i-1].first + 50 + 3*i, 2*vectorPoints[i-1].second + 50 + 3*i };
-       vectorPoints[i] = { 50*i + 3*i, 50*i + 3*i };
+       vectorPoints[i] = { vectorPoints[i-1].first + 50, vectorPoints[i-1].second + 50};
+       vectorPoints[i+1] = { vectorPoints[i-1].first - 50, vectorPoints[i-1].second + 50 };
+       vectorPoints[i+2] = { vectorPoints[i-1].first + 50, vectorPoints[i-1].second + 50 };
     }   
 
     // Write data to output file

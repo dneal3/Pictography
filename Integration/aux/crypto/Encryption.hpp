@@ -232,16 +232,15 @@ double* Encryption::doEncryption()
             Newcolors[colorindex] = (double)(this->dataToEncrypt[i]) * ratior /100; 
             Newcolors[colorindex+4] = (this->dataToEncrypt[i]) * ratiog / 100; 
             Newcolors[colorindex+8] = (this->dataToEncrypt[i]) * ratiob / 100; 
-            printf("(%f, %f, %f)\n", Newcolors[colorindex], Newcolors[colorindex+4], Newcolors[colorindex+8]); 
+
             Newcolors[colorindex+1] = (this->dataToEncrypt[i+1]) * ratior / 100; 
             Newcolors[colorindex+5] = (this->dataToEncrypt[i+1]) * ratiog / 100; 
             Newcolors[colorindex+6] = (this->dataToEncrypt[i+1]) * ratiob / 100; 
-            printf("(%f, %f, %f)\n", Newcolors[colorindex+1], Newcolors[colorindex+5], Newcolors[colorindex+6]); 
              
             Newcolors[colorindex+2] = (this->dataToEncrypt[i+2]) * ratior / 100; 
             Newcolors[colorindex+3] = (this->dataToEncrypt[i+2]) * ratiog / 100; 
             Newcolors[colorindex+7] = (this->dataToEncrypt[i+2]) * ratiob / 100; 
-            printf("(%f, %f, %f)\n", Newcolors[colorindex+2], Newcolors[colorindex+3], Newcolors[colorindex+7]); 
+            
             c++; 
         }   
          
@@ -256,17 +255,14 @@ double* Encryption::doEncryption()
             Newcolors[colorindex+2] = (double)(this->dataToEncrypt[i]) * ratior / 100; 
             Newcolors[colorindex+3] = (this->dataToEncrypt[i]) * ratiog / 100; 
             Newcolors[colorindex+7] = (this->dataToEncrypt[i]) * ratiob / 100; 
-            printf("(%f, %f, %f)\n", Newcolors[colorindex+2], Newcolors[colorindex+3], Newcolors[colorindex+7]); 
              
             Newcolors[colorindex] = (this->dataToEncrypt[i+1]) * ratior / 100; 
             Newcolors[colorindex+4] = (this->dataToEncrypt[i+1]) * ratiog / 100; 
             Newcolors[colorindex+8] = (this->dataToEncrypt[i+1]) * ratiob / 100; 
-            printf("(%f, %f, %f)\n", Newcolors[colorindex], Newcolors[colorindex+4], Newcolors[colorindex+8]); 
              
             Newcolors[colorindex+1] = (this->dataToEncrypt[i+2]) * ratior / 100; 
             Newcolors[colorindex+5] = (this->dataToEncrypt[i+2]) * ratiog / 100;
             Newcolors[colorindex+6] = (this->dataToEncrypt[i+2]) * ratiob / 100;
-            printf("(%f, %f, %f)\n", Newcolors[colorindex+1], Newcolors[colorindex+5], Newcolors[colorindex+6]); 
             c++;
         }   
     

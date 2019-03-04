@@ -32,8 +32,6 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
 	int trisSize, i, i2, colorPositions[9];
 	double charSum;
 	std::string toRet = "";
-	std::cerr << "key: " << key << std::endl;
-	std::cerr << "start: " << key[0] << std::endl;
 	bool isOdd = key[0]%2 == 1 ? true : false;
 	double offR, offG, offB;
 	offR = offG = offB = -1;
@@ -74,30 +72,24 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
 		colorPositions[7] = 0;
 		colorPositions[8] = 1;
 	}
-	printf("offsetR: %f\noffsetG: %f\noffsetB: %f\n", offR, offG, offB);
-	std::cerr << "trisSize: " << trisSize << std::endl;
 	for(i =0; i < trisSize; i++)
 	{
 		for(i2 = 0; i2<3; i2++)
 		{
 		charSum = 0;
 		charSum += tris[i].colors[0][colorPositions[3*i2  ]];
-		std::cerr << "color r" <<tris[i].colors[0][colorPositions[3*i2]] << std::endl;
 
 		charSum += tris[i].colors[1][colorPositions[3*i2+1]];
-		std::cerr << "color g" <<tris[i].colors[1][colorPositions[3*i2+1]] << std::endl;
 
 		charSum += tris[i].colors[2][colorPositions[3*i2+2]];
-		std::cerr << "color b" <<tris[i].colors[2][colorPositions[3*i2+2]] << std::endl;
 
 		charSum *= 100;
 		charSum = ceil(charSum-0.5);
-		std::cerr << "final charSum: " << charSum << " final char: " << (char)charSum << std::endl;
 		toRet += (char)charSum;
 		}
-		std::cerr << "final string: \"" << toRet << "\""<< std::endl;
 	}
-	return std::string();
+	std::cerr << "final string: \"" << toRet << "\""<< std::endl;
+	return toRet;
 }
 
 std::string Decrypter::Decrypt(std::vector<Triangle> tris, std::string keyToUse)

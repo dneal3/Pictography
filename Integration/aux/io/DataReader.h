@@ -46,30 +46,29 @@ std::vector<Triangle> DataReader::read(std::string filename)
 			tris[i].X[0] = pt[0];
 			tris[i].Y[0] = pt[1];
 			tris[i].Z[0] = pt[2];
-			tris[i].colors[0][0] = colors->GetComponent(0, 3*i  );
-			tris[i].colors[0][1] = colors->GetComponent(0, 3*i+1);
-			tris[i].colors[0][2] = colors->GetComponent(0, 3*i+2);
+			tris[i].colors[0][0] = colors->GetComponent(3*i, 0);
+			tris[i].colors[0][1] = colors->GetComponent(3*i, 1);
+			tris[i].colors[0][2] = colors->GetComponent(3*i, 2);
 		//	cerr << "(" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << endl;
 		//	cerr << "(" << tris[i].X[0] << ", " << tris[i].Y[0] << ", " << tris[i].Z[0] << ")" << endl;
 			pt = pts->GetPoint(ptIds[1]);
 			tris[i].X[1] = pt[0];
 			tris[i].Y[1] = pt[1];
 			tris[i].Z[1] = pt[2];
-			tris[i].colors[1][0] = colors->GetComponent(0, 3*i+3);
-			tris[i].colors[1][1] = colors->GetComponent(0, 3*i+4);
-			tris[i].colors[1][2] = colors->GetComponent(0, 3*i+5);
+			tris[i].colors[1][0] = colors->GetComponent(3*i+1, 0);
+			tris[i].colors[1][1] = colors->GetComponent(3*i+1, 1);
+			tris[i].colors[1][2] = colors->GetComponent(3*i+1, 2);
 		//	cerr << "(" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << endl;
 		//	cerr << "(" << tris[i].X[1] << ", " << tris[i].Y[1] << ", " << tris[i].Z[1] << ")" << endl;
 			pt = pts->GetPoint(ptIds[2]);
 			tris[i].X[2] = pt[0];
 			tris[i].Y[2] = pt[1];
 			tris[i].Z[2] = pt[2];
-			tris[i].colors[2][0] = colors->GetComponent(0, 3*i+6);
-			tris[i].colors[2][1] = colors->GetComponent(0, 3*i+7);
-			tris[i].colors[2][2] = colors->GetComponent(0, 3*i+8);
+			tris[i].colors[2][0] = colors->GetComponent(3*i+2, 0);
+			tris[i].colors[2][1] = colors->GetComponent(3*i+2, 1);
+			tris[i].colors[2][2] = colors->GetComponent(3*i+2, 2);
 	/*		cerr << "(" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << endl;
 			cerr << "(" << tris[i].X[2] << ", " << tris[i].Y[2] << ", " << tris[i].Z[2] << ")" << endl; */
-			cerr << "colors for this triangle:" << endl;
 			/*cerr << colors->GetComponent(0, 3*i  ) << endl;
 			cerr << colors->GetComponent(0, 3*i+1) << endl;
 			cerr << colors->GetComponent(0, 3*i+2) << endl;
@@ -79,15 +78,6 @@ std::vector<Triangle> DataReader::read(std::string filename)
 			cerr << colors->GetComponent(0, 3*i+6) << endl;
 			cerr << colors->GetComponent(0, 3*i+7) << endl;
 			cerr << colors->GetComponent(0, 3*i+8) << endl;*/
-			cerr << tris[i].colors[0][0] << endl;
-			cerr << tris[i].colors[0][1] << endl;
-			cerr << tris[i].colors[0][2] << endl;
-			cerr << tris[i].colors[1][0] << endl;
-			cerr << tris[i].colors[1][1] << endl;
-			cerr << tris[i].colors[1][2] << endl;
-			cerr << tris[i].colors[2][0] << endl;
-			cerr << tris[i].colors[2][1] << endl;
-			cerr << tris[i].colors[2][2] << endl;
 		}
 	}
 	catch(invalidData e)
