@@ -50,9 +50,12 @@ void Manager::WriteData(const char *vtkfile, const char *image)
 
     // Put doubles into vector for vertices
     std::vector<std::pair<double, double>> vectorPoints(numColors/3);
-    for (int i = 0; i < (numColors/3); i++)
+    vectorPoints[0] = {50,50};
+    for (int i = 1; i < (numColors/3); i+=3)
     {   
-       vectorPoints[i] = { 2*vectorPoints[i-1].first + 50 + 3*i, 2*vectorPoints[i-1].second + 50 + 3*i };
+       vectorPoints[i  ] = { vectorPoints[i-1].first   , vectorPoints[i-1].second + 50};
+       vectorPoints[i+1] = { vectorPoints[i-1].first-50, vectorPoints[i-1].second + 50};
+       vectorPoints[i+2] = { vectorPoints[i-1].first+50, vectorPoints[i-1].second + 50};
     }   
 
     // Write data to output file
