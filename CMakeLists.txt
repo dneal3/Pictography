@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12.1)
 
 PROJECT(decrypt)
-SET(VTK_DIR /Users/Holly/VTK/VTK-8.1.2)
+SET(VTK_DIR /Users/dloyd2/VTK/VTK-8.1.2)
 
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
