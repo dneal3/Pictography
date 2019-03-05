@@ -20,7 +20,7 @@ class Manager
       void Encrypt();
       void Decrypt(const char *vtkfile);
       void WriteData(const char *vtkfile, const char *image);
-      void ReadData(const char *vtkfile, const char *image, const char *key);
+      void ReadData(const char *vtkfile, const char *key);
       void WriteKey();
 };
 
@@ -65,10 +65,9 @@ void Manager::WriteData(const char *vtkfile, const char *image)
     ImageManager::CreateImage(temp, image);
 }
 
-void Manager::ReadData(const char *vtkfile, const char *image, const char *key)
+void Manager::ReadData(const char *vtkfile, const char *key)
 {
     std::vector<Triangle> temp = DataReader::Read(vtkfile);
-    ImageManager::CreateImage(temp, image);
     this->key = key;
 }
 
@@ -86,6 +85,7 @@ void Manager::Decrypt(const char *vtkfile)
     }
 
     Decrypter decrypt(key);
+    decrypt.Decrypt(triangles, key);
 }
 
 void Manager::WriteKey()
