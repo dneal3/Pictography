@@ -19,10 +19,9 @@ class Encryption
     std::string key;
     size_t plainHash;
     int rearrFactors[2];
-    int numColors; // for debugging
     std::string dataToEncrypt;
     
-    std::string generateKey(int offsetr, int offsetg, int offsetb, int oddeven);
+    void generateKey(int oddeven);
     void RearrangePlain(void);
     void Factorize(void);
     
@@ -30,8 +29,8 @@ class Encryption
         Encryption(void);
         Encryption(std::string data);
         double* doEncryption();
-        std::string getKey() {return this->key;};
-        int getNumColors() {return this->numColors;};
+        std::string getKey() {return key;};
+        int* getFactors() {return rearrFactors;};
     
 };
 

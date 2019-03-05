@@ -43,7 +43,7 @@ Encryption::Encryption(void)
         }
     }
     
-    this->dataToEncrypt = userData;
+    dataToEncrypt = userData;
 }
 
 //Constructor 2 with data given
@@ -51,7 +51,7 @@ Encryption::Encryption(std::string data)
 {
     //this doesnt really work might just always need to have it input through std in
     //could do file reading...
-    this->dataToEncrypt = data;
+    dataToEncrypt = data;
 }
 
 
@@ -91,18 +91,15 @@ void Encryption::RearrangePlain(void)
         {
             index = (i)+(rows*j);
             newString+=dataToEncrypt[index];
-            std::cout << "index is " << index << std::endl;
-            std::cout << "newString is "<< newString << std::endl;
         }
     }
     dataToEncrypt = newString;
 }
 
-std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEven)
+void Encryption::generateKey(int oddOrEven)
 {
     srand(time(0));
     int newChar;
-    char buffer[2];
     
     //if even
     //offsetr will be at index[3]
@@ -116,7 +113,6 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
 
     // how to determine other values
     int keylength = 128;
-    char* keyString = new char[keylength+1];
     
     if(!oddOrEven) // when it's even
     {
@@ -126,24 +122,11 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
             {
                 
                 case 0:
-                    keyString[0] = (oddOrEven+32) + '0';
+                    key += std::to_string(oddOrEven);
                     break;
-                /*
-                case 3:
-                    keyString[3] = offsetr+'0';
-                    break;
-                
-                case 10:
-                    keyString[10] = offsetg+'0';
-                    break;
-                    
-                case 15:
-                    keyString[15] = offsetb + '0';
-                    break;
-                */
                 default:
-                    newChar = (rand() % 10);
-                    keyString[i] = newChar;
+                    newChar = ((rand() % 9) + 1);
+                    key += std::to_string(newChar);
                     break;
             }
         }
@@ -156,29 +139,33 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
             {
             
                 case 0:
-                    keyString[0] = (oddOrEven+32) + '0';
+                    key += std::to_string(oddOrEven);
                     break;
-                /*
-                case 5:
-                    keyString[5] = offsetg + '0';
-                    break;
-                    
-                case 13:
-                    keyString[13] = offsetr + '0';
-                    break;
-                            
-                case 16:
-                    keyString[16] = offsetb + '0';
-                    break;
-                */
+               
                 default:
-                    newChar = (rand() % 10);
-                    keyString[i] = newChar;
+                    newChar = ((rand() % 9) + 1);
+                    key += std::to_string(newChar);
                     break;
             }
         }
     }
-    return std::string(keyString);
+    key[1] = std::to_string((rearrFactors[0])/100)[0];
+    key[2] = std::to_string((rearrFactors[0]/10)%10)[0];
+    key[3] = std::to_string((rearrFactors[0]) % 10)[0];
+    key[4] = std::to_string((rearrFactors[1])/100)[0];
+    key[5] = std::to_string(((rearrFactors[1])/10) % 10)[0];
+    key[6] = std::to_string((rearrFactors[1]) % 10)[0];
+    std::cout << "rearrfactor 0 " << rearrFactors[0] <<  std::endl;
+    std::cout << "rearrfactor 1 " << rearrFactors[1] <<  std::endl;
+    
+    std::cout << "key 1 " << key[1] << std::endl;
+    std::cout << "key 2 " << key[2] << std::endl;
+    std::cout << "key 3 " << key[3] << std::endl;
+    std::cout << "key 4 " << key[4] << std::endl;
+    std::cout << "key 5 " << key[5] << std::endl;
+    std::cout << "key 6 " << key[6] << std::endl;
+
+    std::cout << key << std::endl;
 }
 
    
@@ -187,30 +174,28 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
 double* Encryption::doEncryption()
 {
     srand(time(0));
-    int numChars = this->dataToEncrypt.size();
+    int numChars = dataToEncrypt.size();
     std::hash<std::string> hashPlain;
-    plainHash = hashPlain(dataToEncrypt);
-    Factorize();
-    RearrangePlain();
     if(numChars % 3 == 2)
     {
         numChars++;
-        this->dataToEncrypt += ' ';
+        dataToEncrypt += ' ';
     }
     else if(numChars % 3 == 1)
     {
         numChars+=2;
-        this->dataToEncrypt += ' ';
-        this->dataToEncrypt += ' ';
+        dataToEncrypt += ' ';
+        dataToEncrypt += ' ';
         
     }
     //decide if hash after adding padding, or not?
-    //plainHash = hashPlain(dataToEncrypt);
     std::cout << "new data to encrypt " << dataToEncrypt << std::endl;
+    plainHash = hashPlain(dataToEncrypt);
+    Factorize();
+    RearrangePlain();
     int numColors = numChars * 3;
-    this->numColors = numColors;
     
-    double* Newcolors = new double[numColors+1];
+    double* newColors = new double[numColors+1];
     
     //offsetr r = rand() mod 100
     //offsetg g = rand() mod (100-r)
@@ -227,39 +212,27 @@ double* Encryption::doEncryption()
     double ratiog = offsetg * .01;
     double ratiob = offsetb * .01;
     
-    if(TESTING)
-    {
-        printf("oddOrEven is %d\n", oddOrEven);
-     
-        printf("offsetr, %d\n", offsetr);
-        printf("offsetg, %d\n", offsetg);
-        printf("offsetb, %d\n", offsetb);
-        
-        printf("ratior, %f\n", ratior);
-        printf("ratiog, %f\n", ratiog);
-        printf("ratiob, %f\n", ratiob);
-    }
-    
     if(!oddOrEven)
     {
         for(int i = 0; i < numChars; i+=3)
         {
             //in the picture we drew dots were V1,
+            // diffuse across triangles same sprial pattern
             // 0  1  2  3  4  5  6  7  8
-            // R1 R2 R3 G3 G1 G2 B3 B2 B1
+            // R1 R2 R3 G3 G1 G2 B2 B3 B1
             int colorindex = c * 9;
             
-            Newcolors[colorindex] = (this->dataToEncrypt[i]) * ratior;
-            Newcolors[colorindex+4] = (this->dataToEncrypt[i]) * ratiog;
-            Newcolors[colorindex+8] = (this->dataToEncrypt[i]) * ratiob;
+            newColors[colorindex] = (dataToEncrypt[i]) * ratior;
+            newColors[colorindex+4] = (dataToEncrypt[i]) * ratiog;
+            newColors[colorindex+8] = (dataToEncrypt[i]) * ratiob;
             
-            Newcolors[colorindex+1] = (this->dataToEncrypt[i+1]) * ratior;
-            Newcolors[colorindex+5] = (this->dataToEncrypt[i+1]) * ratiog;
-            Newcolors[colorindex+7] = (this->dataToEncrypt[i+1]) * ratiob;
+            newColors[colorindex+1] = (dataToEncrypt[i+1]) * ratior;
+            newColors[colorindex+5] = (dataToEncrypt[i+1]) * ratiog;
+            newColors[colorindex+6] = (dataToEncrypt[i+1]) * ratiob;
             
-            Newcolors[colorindex+2] = (this->dataToEncrypt[i+2]) * ratior;
-            Newcolors[colorindex+3] = (this->dataToEncrypt[i+2]) * ratiog;
-            Newcolors[colorindex+6] = (this->dataToEncrypt[i+2]) * ratiob;
+            newColors[colorindex+2] = (dataToEncrypt[i+2]) * ratior;
+            newColors[colorindex+3] = (dataToEncrypt[i+2]) * ratiog;
+            newColors[colorindex+7] = (dataToEncrypt[i+2]) * ratiob;
             c++;
         }
         
@@ -268,62 +241,49 @@ double* Encryption::doEncryption()
     {
         for(int i = 0; i < numChars; i+=3)
         {
+            //diffuse mix up vertices
             // 0  1  2  3  4  5  6  7  8
             // R2 R3 R1 G1 G2 G3 B3 B1 B2
             int colorindex = c * 9;
             
-            Newcolors[colorindex+2] = (this->dataToEncrypt[i]) * ratior;
-            Newcolors[colorindex+3] = (this->dataToEncrypt[i]) * ratiog;
-            Newcolors[colorindex+7] = (this->dataToEncrypt[i]) * ratiob;
+            newColors[colorindex+2] = (dataToEncrypt[i]) * ratior;
+            newColors[colorindex+3] = (dataToEncrypt[i]) * ratiog;
+            newColors[colorindex+7] = (dataToEncrypt[i]) * ratiob;
             
-            Newcolors[colorindex] = (this->dataToEncrypt[i+1]) * ratior;
-            Newcolors[colorindex+4] = (this->dataToEncrypt[i+1]) * ratiog;
-            Newcolors[colorindex+8] = (this->dataToEncrypt[i+1]) * ratiob;
+            newColors[colorindex] = (dataToEncrypt[i+1]) * ratior;
+            newColors[colorindex+4] = (dataToEncrypt[i+1]) * ratiog;
+            newColors[colorindex+8] = (dataToEncrypt[i+1]) * ratiob;
             
-            Newcolors[colorindex+1] = (this->dataToEncrypt[i+2]) * ratior;
-            Newcolors[colorindex+5] = (this->dataToEncrypt[i+2]) * ratiog;
-            Newcolors[colorindex+6] = (this->dataToEncrypt[i+2]) * ratiob;
+            newColors[colorindex+1] = (dataToEncrypt[i+2]) * ratior;
+            newColors[colorindex+5] = (dataToEncrypt[i+2]) * ratiog;
+            newColors[colorindex+6] = (dataToEncrypt[i+2]) * ratiob;
             c++;
         }
         
     }
     
-    this->key = this->generateKey(offsetr, offsetg, offsetb, oddOrEven);
+    generateKey(oddOrEven);
+   
+    //for colors
+    //loop through the colors and offset colors by the values in the key. the casear cipher.
+    //change the colors by the offsets given by the key.
+    for(int i = 0; i<numColors; i++)
+    {
+        newColors[i] = newColors[i] + (key[(i%127)]);
+        std::cout << "color " << i << " is " << newColors[i] << std::endl;
+        //i believe this is actually fine, because while its adding the character value of every integer it should never be over 255 as the highest two values it could add together would be 126 (~) + 57 (9)
+    }
+    //maybe pass in actual colors that are multiplied by 255.0 this would make the offsetting easier could also take each number and divide it by 255.0 then add it to the number as a new offset, max add is 9/255 (0.035)
+    // ask what the handling is for a number greater than 1.0 or rather 255
 
-    return Newcolors;
+    return newColors;
 }
 
 int main(int argc, char* argv[])
 {
-    Encryption encryp;
+    Encryption encryp("In designing security systems, it is wise to assume that the details of the cryptographic algorithm are already available to the attacker. This is known as Kerckhoffs\' principle — \"only secrecy of the key provides security\", or, reformulated as Shannon's maxim, \"the enemy knows the system\". The history of cryptography provides evidence that it can be difficult to keep the details of a widely used algorithm secret (see security through obscurity). A key is often easier to protect (it\'s typically a small piece of information) than an encryption algorithm, and easier to change if compromised. Thus, the security of an encryption system in most cases relies on some key being kept secret.");
     double* colorBuffer;
     colorBuffer = encryp.doEncryption();
 
-    if(TESTING)
-    {
-        std::string keysmurf = encryp.getKey();
-        int colors = encryp.getNumColors();
-        int oddOrEvenFlag = (keysmurf[0] - '0') - 32;
-        for(int i=0; i<colors; i++)
-        {
-            printf("Color %d is %f\n", i, colorBuffer[i]);
-        }
-        if(!oddOrEvenFlag)
-        {
-            printf("%d\n", (keysmurf[0] - '0')-32);
-            printf("%d\n", keysmurf[3] - '0');
-            printf("%d\n", keysmurf[10] - '0');
-            printf("%d\n", keysmurf[15] - '0');
-        }
-        else{
-            printf("%d\n", (keysmurf[0] - '0')-32);
-            printf("%d\n", keysmurf[5] - '0');
-            printf("%d\n", keysmurf[13] - '0');
-            printf("%d\n", keysmurf[16] - '0');
-        }
-    }
-
-    
-    
     return 0;
 }
