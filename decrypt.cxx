@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
     Manager manager;
 
     // Read data from .vtk file and generate image
-    manager.ReadData(argv[1], argv[2]);
+    manager.ReadData(argv[1], argv[2], argv[3]);
 
     // Decrypt .vtk file
     manager.Decrypt(argv[1]);

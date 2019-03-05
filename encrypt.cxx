@@ -1,4 +1,4 @@
-#include "Manager.h"
+#include "manager.h"
 
 int main(int argc, char* argv[])
 {
@@ -10,6 +10,9 @@ int main(int argc, char* argv[])
 
     // Write data to .vtk file
     manager.WriteData(argv[1], argv[2]);
+
+    // Write key to file
+    manager.WriteKey();
 
     return 0;
 }

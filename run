@@ -1,3 +1,0 @@
-cmake . ; 
-make ;
-./test.app/Contents/MacOS/test

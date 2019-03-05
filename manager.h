@@ -7,9 +7,8 @@
 #include "aux/io/DataReader.h"
 #include "aux/imageCreation/ImageManager.h"
 
-// Encrypt and Writer into own file
-// Decrypt and Reader into own file
-// Decrpt and Reader should take in key, .vtk file, and image name
+#include <iostream>
+#include <fstream>
 
 class Manager
 {
@@ -21,7 +20,8 @@ class Manager
       void Encrypt();
       void Decrypt(const char *vtkfile);
       void WriteData(const char *vtkfile, const char *image);
-      void ReadData(const char *vtkfile, const char *image);
+      void ReadData(const char *vtkfile, const char *image, const char *key);
+      void WriteKey();
 };
 
 void Manager::Encrypt()
@@ -65,10 +65,11 @@ void Manager::WriteData(const char *vtkfile, const char *image)
     ImageManager::CreateImage(temp, image);
 }
 
-void Manager::ReadData(const char *vtkfile, const char *image)
+void Manager::ReadData(const char *vtkfile, const char *image, const char *key)
 {
     std::vector<Triangle> temp = DataReader::Read(vtkfile);
     ImageManager::CreateImage(temp, image);
+    this->key = key;
 }
 
 void Manager::Decrypt(const char *vtkfile)
@@ -84,9 +85,15 @@ void Manager::Decrypt(const char *vtkfile)
        printf("%f\n%f\n%f\n", triangles[i].colors[2][0], triangles[i].colors[2][1], triangles[i].colors[2][2]);
     }
 
-
     Decrypter decrypt(key);
-    //decrypt.Decrypt();
+}
+
+void Manager::WriteKey()
+{
+   std::ofstream keyFile;
+   keyFile.open("secretkey.txt");
+   keyFile << key;
+   keyFile.close();
 }
 
 #endif

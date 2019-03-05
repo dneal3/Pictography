@@ -189,7 +189,7 @@ double* Encryption::doEncryption()
             
     }   
         
-    printf("numChars after being made to mult of 3, %d\n", this->dataToEncrypt.size()); 
+    //printf("numChars after being made to mult of 3, %d\n", this->dataToEncrypt.size()); 
     std::cerr << "encrypting: \"" << dataToEncrypt << "\"" << std::endl;
         
     int numColors = numChars * 3; //numchars * 3 so we have 3 color channels per char 

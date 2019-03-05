@@ -1,0 +1,3 @@
+cmake . ; 
+make ;
+./encrypt.app/Contents/MacOS/encrypt file.vtk image
