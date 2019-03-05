@@ -188,13 +188,12 @@ double* Encryption::doEncryption()
         dataToEncrypt += ' ';
         
     }
-    //decide if hash after adding padding, or not?
-    std::cout << "new data to encrypt " << dataToEncrypt << std::endl;
+
     plainHash = hashPlain(dataToEncrypt);
     Factorize();
     RearrangePlain();
-    int numColors = numChars * 3;
     
+    int numColors = numChars * 3;
     double* newColors = new double[numColors+1];
     
     //offsetr r = rand() mod 100
@@ -203,8 +202,8 @@ double* Encryption::doEncryption()
     
     int c = 0;
     int oddOrEven = (rand() % 2);
-    int offsetr = (rand() % (100));
-    int offsetg = (rand() % (100-offsetr));
+    int offsetr = (rand() % (99))+1;
+    int offsetg = (rand() % (99-offsetr))+1;
     int offsetb = 100 - (offsetr + offsetg);
     
     
@@ -222,7 +221,7 @@ double* Encryption::doEncryption()
             // R1 R2 R3 G3 G1 G2 B2 B3 B1
             int colorindex = c * 9;
             
-            newColors[colorindex] = (dataToEncrypt[i]) * ratior;
+            newColors[colorindex] = (double)(dataToEncrypt[i]) * ratior;
             newColors[colorindex+4] = (dataToEncrypt[i]) * ratiog;
             newColors[colorindex+8] = (dataToEncrypt[i]) * ratiob;
             
@@ -246,7 +245,7 @@ double* Encryption::doEncryption()
             // R2 R3 R1 G1 G2 G3 B3 B1 B2
             int colorindex = c * 9;
             
-            newColors[colorindex+2] = (dataToEncrypt[i]) * ratior;
+            newColors[colorindex+2] = (double)(dataToEncrypt[i]) * ratior;
             newColors[colorindex+3] = (dataToEncrypt[i]) * ratiog;
             newColors[colorindex+7] = (dataToEncrypt[i]) * ratiob;
             
@@ -269,12 +268,10 @@ double* Encryption::doEncryption()
     //change the colors by the offsets given by the key.
     for(int i = 0; i<numColors; i++)
     {
-        newColors[i] = newColors[i] + (key[(i%127)]);
+        newColors[i] = ((newColors[i] + (key[(i%127)]))/255);
         std::cout << "color " << i << " is " << newColors[i] << std::endl;
         //i believe this is actually fine, because while its adding the character value of every integer it should never be over 255 as the highest two values it could add together would be 126 (~) + 57 (9)
     }
-    //maybe pass in actual colors that are multiplied by 255.0 this would make the offsetting easier could also take each number and divide it by 255.0 then add it to the number as a new offset, max add is 9/255 (0.035)
-    // ask what the handling is for a number greater than 1.0 or rather 255
 
     return newColors;
 }
