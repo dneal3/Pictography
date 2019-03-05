@@ -6,7 +6,7 @@
 //
 
 #include "Encryption.hpp"
-#define TESTING 1
+#define TESTING 0
 
 //Define Encryption Methods
 
@@ -54,12 +54,49 @@ Encryption::Encryption(std::string data)
     this->dataToEncrypt = data;
 }
 
-//Standard Destructor deletes
-Encryption::~Encryption(void)
+
+
+void Encryption::Factorize(void)
 {
-    delete this->colors;
+    srand(time(0));
+    int factors[128];
+    int numFactors = 0;
+    int index1, index2;
+    int sizeOfPlain = dataToEncrypt.size();
+    for(int i = 1; i<=sizeOfPlain; i++)
+    {
+        if(sizeOfPlain % i == 0)
+        {
+            factors[numFactors] = i;
+            numFactors++;
+        }
+    }
+    index1 = rand() % (numFactors-1);
+    index2 = (numFactors-1) - index1;
+    rearrFactors[0] = factors[index1];
+    rearrFactors[1] = factors[index2];
+    
 }
 
+void Encryption::RearrangePlain(void)
+{
+    std::string newString;
+    int index;
+    int rows = rearrFactors[0];
+    int columns = rearrFactors[1];
+    
+    for(int i=0; i<rows; i++)
+    {
+        for(int j = 0; j<columns; j++)
+        {
+            index = (i)+(rows*j);
+            newString+=dataToEncrypt[index];
+            std::cout << "index is " << index << std::endl;
+            std::cout << "newString is "<< newString << std::endl;
+        }
+    }
+    dataToEncrypt = newString;
+}
 
 std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEven)
 {
@@ -78,7 +115,7 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
     //offsetb will be at index[16]
 
     // how to determine other values
-    int keylength = 32; // different sized keys! 32-64
+    int keylength = 128;
     char* keyString = new char[keylength+1];
     
     if(!oddOrEven) // when it's even
@@ -87,9 +124,11 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
         {
             switch(i)
             {
+                
                 case 0:
                     keyString[0] = (oddOrEven+32) + '0';
                     break;
+                /*
                 case 3:
                     keyString[3] = offsetr+'0';
                     break;
@@ -101,10 +140,10 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
                 case 15:
                     keyString[15] = offsetb + '0';
                     break;
-                    
+                */
                 default:
-                    newChar = (rand() % 32) + 32; // made it look more natural
-                    keyString[i] = newChar + '0';
+                    newChar = (rand() % 10);
+                    keyString[i] = newChar;
                     break;
             }
         }
@@ -115,10 +154,11 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
         {
             switch(i) //puts the information in the right place
             {
+            
                 case 0:
                     keyString[0] = (oddOrEven+32) + '0';
                     break;
-
+                /*
                 case 5:
                     keyString[5] = offsetg + '0';
                     break;
@@ -130,10 +170,10 @@ std::string Encryption::generateKey(int offsetr, int offsetg, int offsetb, int o
                 case 16:
                     keyString[16] = offsetb + '0';
                     break;
-                            
+                */
                 default:
-                    newChar = (rand() % 95) + 32;
-                    keyString[i] = newChar + '0';
+                    newChar = (rand() % 10);
+                    keyString[i] = newChar;
                     break;
             }
         }
@@ -148,6 +188,10 @@ double* Encryption::doEncryption()
 {
     srand(time(0));
     int numChars = this->dataToEncrypt.size();
+    std::hash<std::string> hashPlain;
+    plainHash = hashPlain(dataToEncrypt);
+    Factorize();
+    RearrangePlain();
     if(numChars % 3 == 2)
     {
         numChars++;
@@ -160,7 +204,9 @@ double* Encryption::doEncryption()
         this->dataToEncrypt += ' ';
         
     }
-    
+    //decide if hash after adding padding, or not?
+    //plainHash = hashPlain(dataToEncrypt);
+    std::cout << "new data to encrypt " << dataToEncrypt << std::endl;
     int numColors = numChars * 3;
     this->numColors = numColors;
     
@@ -243,7 +289,6 @@ double* Encryption::doEncryption()
     }
     
     this->key = this->generateKey(offsetr, offsetg, offsetb, oddOrEven);
-    this->colors = Newcolors;
 
     return Newcolors;
 }

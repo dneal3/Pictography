@@ -12,19 +12,23 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
+#include <functional>
 
 class Encryption
 {
     std::string key;
+    size_t plainHash;
+    int rearrFactors[2];
     int numColors; // for debugging
     std::string dataToEncrypt;
-    double* colors;
     
-    std::string generateKey(int offsetr, int offsetg, int offsetb, int oddeven); //Might want to return key and just use it in doEncryption.
+    std::string generateKey(int offsetr, int offsetg, int offsetb, int oddeven);
+    void RearrangePlain(void);
+    void Factorize(void);
+    
     public:
         Encryption(void);
         Encryption(std::string data);
-        ~Encryption();
         double* doEncryption();
         std::string getKey() {return this->key;};
         int getNumColors() {return this->numColors;};
