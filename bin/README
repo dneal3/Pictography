@@ -1,0 +1,1 @@
+this directory is dedicated to the executables that are run by the Qt user interface. These executables will be called via execvp upon certain logical conditions holding true in the user interface. Each executable will have a minimum of 2 arguments

@@ -3,7 +3,6 @@
 
 #include <vtkImageData.h>
 #include <vtkPNGWriter.h>
-
 #include <algorithm>
 #include <cmath>
 #include <iostream>
