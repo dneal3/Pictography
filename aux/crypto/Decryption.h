@@ -33,15 +33,10 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
 	double charSum;
 	std::string toRet = "";
 	bool isOdd = key[0]%2 == 1 ? true : false;
-	double offR, offG, offB;
-	offR = offG = offB = -1;
 	trisSize = tris.size();
 	if(isOdd)
 	{
 		std::cerr << "is Odd" << std::endl;
-		offR = key[13] * 0.01;
-		offG = key[5]  * 0.01;
-		offB = key[16] * 0.01;
 		colorPositions[0] = 2;
 		colorPositions[1] = 0;
 		colorPositions[2] = 1;
@@ -57,9 +52,6 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
 	else
 	{
 		std::cerr << "is Even" << std::endl;
-		offR = key[3]  * 0.01;
-		offG = key[10] * 0.01;
-		offB = key[15] * 0.01;
 		colorPositions[0] = 0;
 		colorPositions[1] = 1;
 		colorPositions[2] = 2;

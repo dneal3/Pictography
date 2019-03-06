@@ -7,7 +7,7 @@ find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 
 add_executable(encrypt MACOSX_BUNDLE encrypt)
-
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 if(VTK_LIBRARIES)
   target_link_libraries(encrypt ${VTK_LIBRARIES})
 else()

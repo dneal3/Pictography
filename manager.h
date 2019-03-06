@@ -31,13 +31,26 @@ void Manager::Encrypt()
 
     // Get the variables of the Manager object
     colors = encrypt.doEncryption();
-    key = encrypt.getKey();
+	std::cerr << "after encryption" << std::endl;
+	std::cerr << "colors is " << colors << std::endl;
+    key = std::string(encrypt.getKey());
+	fprintf(stderr, "key in manager is %p\n", &key);
     numColors = encrypt.getNumColors();
     oddOrEvenFlag = (key[0] - '0') - 32;
+	std::cerr << "writing key to file" << std::endl;
+    std::ofstream keyFile;
+    keyFile.open("secretkey.txt");
+	std::cerr << "opened" << std::endl;
+	fprintf(stderr, "keyFile ptr is %p\n", &keyFile);
+    keyFile << key;
+	std::cerr << "added" << std::endl;
+    keyFile.close();
+	std::cerr << "end of encryption" << std::endl;
 }
 
 void Manager::WriteData(const char *vtkfile, const char *image)
 {
+	fprintf(stderr, "vtkfile is%p, image is%p\n", vtkfile, image);
     // This class writes encrypted message into a .vtk file
     DataWriter writer;
 
@@ -59,16 +72,19 @@ void Manager::WriteData(const char *vtkfile, const char *image)
     }   
 
     // Write data to output file
+	std::cerr << "beginning to write data " << std::endl;
     writer.write(vectorColorBuffer, vectorPoints, vtkfile);
+	std::cerr << "written all data " << std::endl;
 
     std::vector<Triangle> temp = DataReader::Read(vtkfile);
     ImageManager::CreateImage(temp, image);
+	std::cerr << "end of write data" << std::endl;
 }
 
 void Manager::ReadData(const char *vtkfile, const char *key)
 {
     std::vector<Triangle> temp = DataReader::Read(vtkfile);
-    this->key = key;
+    this->key = key; 
 }
 
 void Manager::Decrypt(const char *vtkfile)
@@ -90,10 +106,11 @@ void Manager::Decrypt(const char *vtkfile)
 
 void Manager::WriteKey()
 {
-   std::ofstream keyFile;
-   keyFile.open("secretkey.txt");
-   keyFile << key;
-   keyFile.close();
+	std::cerr << "in write key" << std::endl;
+//   std::ofstream keyFile;
+//   keyFile.open("secretkey.txt");
+//   keyFile << key;
+//   keyFile.close();
 }
 
 #endif

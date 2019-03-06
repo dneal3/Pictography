@@ -7,7 +7,7 @@ find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 
 add_executable(decrypt MACOSX_BUNDLE decrypt)
-
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 if(VTK_LIBRARIES)
   target_link_libraries(decrypt ${VTK_LIBRARIES})
 else()

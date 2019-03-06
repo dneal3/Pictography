@@ -168,6 +168,7 @@ char* Encryption::generateKey(int offsetr, int offsetg, int offsetb, int oddOrEv
             }   
         }   
     }   
+	fprintf(stderr, "string is:%p\n", keyString);
     return keyString;
 }
 
@@ -271,7 +272,8 @@ double* Encryption::doEncryption()
     this->key = this->generateKey(offsetr, offsetg, offsetb, oddOrEven);
 //    this->colors = Newcolors;
     printf("%s\n", this->key);
-
+	fprintf(stderr, "key pointer is%p\n", this->key);
+	fprintf(stderr, "colors%p\n", Newcolors);
     return Newcolors;
 }
 #endif /* Encryption_hpp */
