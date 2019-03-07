@@ -9,33 +9,33 @@
 
 #include <iostream>
 #include <fstream>
-
 class Manager
 {
    public:
-      double *colors;
+      std::vector<double> colors;
       std::string key;
       int numColors;
       int oddOrEvenFlag;
-      void Encrypt();
+      void Encrypt(std::string toEncrypt);
       void Decrypt(const char *vtkfile);
       void WriteData(const char *vtkfile, const char *image);
       void ReadData(const char *vtkfile, const char *key);
       void WriteKey();
 };
 
-void Manager::Encrypt()
+void Manager::Encrypt(std::string toEncrypt)
 {
     // Create an Encryption class
-    Encryption encrypt;
+    Encryption encrypt(toEncrypt);
 
     // Get the variables of the Manager object
     colors = encrypt.doEncryption();
+	int count = 0;
+	int tempIndex = 0;
+	numColors = colors.size();
 	std::cerr << "after encryption" << std::endl;
-	std::cerr << "colors is " << colors << std::endl;
-    key = std::string(encrypt.getKey());
+    key = encrypt.getKey();
 	fprintf(stderr, "key in manager is %p\n", &key);
-    numColors = encrypt.getNumColors();
     oddOrEvenFlag = (key[0] - '0') - 32;
 	std::cerr << "writing key to file" << std::endl;
     std::ofstream keyFile;
@@ -55,12 +55,7 @@ void Manager::WriteData(const char *vtkfile, const char *image)
     DataWriter writer;
 
     // Put doubles into vector for colors
-    std::vector<double> vectorColorBuffer(numColors);
-    for (int i = 0; i < numColors; i++)
-    {   
-        vectorColorBuffer[i] = colors[i];
-    }   
-
+	std::cerr << "number of colors " << numColors << std::endl;
     // Put doubles into vector for vertices
     std::vector<std::pair<double, double>> vectorPoints(numColors/3);
     vectorPoints[0] = {50,50};
@@ -73,7 +68,7 @@ void Manager::WriteData(const char *vtkfile, const char *image)
 
     // Write data to output file
 	std::cerr << "beginning to write data " << std::endl;
-    writer.write(vectorColorBuffer, vectorPoints, vtkfile);
+    writer.write(colors, vectorPoints, vtkfile);
 	std::cerr << "written all data " << std::endl;
 
     std::vector<Triangle> temp = DataReader::Read(vtkfile);

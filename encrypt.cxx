@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
     Manager manager;
 
     // Encrypt a message
-    manager.Encrypt();
+    manager.Encrypt("Hel");
 
     // Write data to .vtk file
 	std::cerr << "argv[1] is " << argv[1] << std::endl;

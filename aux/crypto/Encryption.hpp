@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string.h>
 #include <functional>
+#include <vector>
 
 class Encryption
 {
@@ -22,8 +23,9 @@ class Encryption
     
     public:
         Encryption(std::string data);
-        double* doEncryption();
+        std::vector<double> doEncryption();
         std::string getKey() {return key;};
+	int getHash(){return (int)plainHash;}
         int* getFactors() {return rearrFactors;};
     
 };
@@ -31,6 +33,7 @@ class Encryption
 Encryption::Encryption(std::string data)
 {
     dataToEncrypt = data;
+    key = std::string("");
 }
 
 void Encryption::FactorizeNum(int num)
@@ -150,7 +153,7 @@ void Encryption::generateKey(int oddOrEven)
 
 
 
-double* Encryption::doEncryption()
+std::vector<double>  Encryption::doEncryption()
 {
     srand(time(0));
     int numChars = dataToEncrypt.size();
@@ -166,7 +169,8 @@ double* Encryption::doEncryption()
     RearrangePlain();
     
     int numColors = numChars * 3;
-    double* newColors = new double[numColors+1];
+std::cerr<< "numColors: " << numColors << std::endl; 
+    std::vector<double> newColors(numColors);
     
     int c = 0;
     int oddOrEven = (rand() % 2);
@@ -186,7 +190,8 @@ double* Encryption::doEncryption()
             // 0  1  2  3  4  5  6  7  8
             // R1 R2 R3 G3 G1 G2 B2 B3 B1
             int colorindex = c * 9;
-            
+           std::cerr << "colorindex: " << colorindex << std::endl; 
+           std::cerr << "colorindex+7: " << colorindex+7 << std::endl; 
             newColors[colorindex] =   (dataToEncrypt[i]) * ratior;
             newColors[colorindex+4] = (dataToEncrypt[i]) * ratiog;
             newColors[colorindex+8] = (dataToEncrypt[i]) * ratiob;
@@ -210,6 +215,8 @@ double* Encryption::doEncryption()
             // R2 R3 R1 G1 G2 G3 B3 B1 B2
             int colorindex = c * 9;
             
+           std::cerr << "colorindex: " << colorindex << std::endl; 
+           std::cerr << "colorindex+7: " << colorindex+7 << std::endl; 
             newColors[colorindex+2] = (dataToEncrypt[i]) * ratior;
             newColors[colorindex+3] = (dataToEncrypt[i]) * ratiog;
             newColors[colorindex+7] = (dataToEncrypt[i]) * ratiob;
@@ -230,7 +237,8 @@ double* Encryption::doEncryption()
     int index;
     int rows = numTriFactors[0];
     int columns = numTriFactors[1];
-    
+
+    generateKey(oddOrEven);
     key[122] = std::to_string((numTriFactors[0])/100)[0];
     key[123] = std::to_string(((numTriFactors[0])/10)%10)[0];
     key[124] = std::to_string((numTriFactors[0]) % 10)[0];
@@ -238,19 +246,19 @@ double* Encryption::doEncryption()
     key[126] = std::to_string(((numTriFactors[1])/10) % 10)[0];
     key[127] = std::to_string((numTriFactors[1]) % 10)[0];
     
-    double* shiftedColors = new double[numColors+1];
+    std::vector<double> shiftedColors(numColors);;
     c = 0;
     for(int i=0; i<rows; i++)
     {
         for(int j = 0; j<columns; j++)
         {
             index = (i)+(rows*j);
+	std::cerr << "index during shifting: " << index << std::endl;
             shiftedColors[c] =  newColors[index];
             c++;
         }
     }
     
-    generateKey(oddOrEven);
     
     for(int i = 0; i<numColors; i++)
     {
