@@ -91,7 +91,7 @@ void MainWindow::on_StartEncryption_clicked()
     args[0] = (char*)std::string("../bin/encrypt").c_str();
     args[1] = (char*)tempfn.c_str();
     args[2] = (char*)filename.c_str();
-    fork();
+    exec
    // execvp("../bin/encrypt", args);
     system("~/Desktop/cis/433/encryptionProj/CIS433Project/runEncrypt.sh");
   //  system("pwd");

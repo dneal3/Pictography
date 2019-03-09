@@ -10,7 +10,6 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -36,6 +35,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    std::string filename;
 };
 
 #endif // MAINWINDOW_H
