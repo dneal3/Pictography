@@ -1,3 +1,0 @@
-/Users/Holly/Documents/Current/433/CIS433Project/CMakeFiles/rebuild_cache.dir
-/Users/Holly/Documents/Current/433/CIS433Project/CMakeFiles/edit_cache.dir
-/Users/Holly/Documents/Current/433/CIS433Project/CMakeFiles/decrypt.dir
