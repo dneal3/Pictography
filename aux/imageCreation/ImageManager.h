@@ -34,12 +34,10 @@ class Screen
       double *zBuffer;
     virtual ~Screen()
     {
-	cout << "deconstructing screen" << endl;
 	delete []zBuffer;
     }
     void Initialize(int imWidth, int imHeight)
     {
-	cout << "initalizing screen" << endl;
 	this->width = imWidth;
 	this->height = imHeight;
 	this->totalSize = imWidth*imHeight;

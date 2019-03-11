@@ -1,0 +1,21 @@
+#! /bin/bash
+# updates the bin directory to the most recent encrypt and decrypt files
+cmake .
+make
+echo "updating decrypt"
+cp ./decrypt.app/Contents/MacOS/decrypt ./bin/
+echo "updating encrypt"
+cp ./encrypt.app/Contents/MacOS/encrypt ./bin/
+
+if [ -d ../QtCreator/build-433UI-Desktop_Qt_5_12_0_clang_64bit-Debug/433UI.app/Contents/MacOS/ ]; then
+   echo "updating debugging too"
+   cp ./bin/encrypt ../QtCreator/build-433UI-Desktop_Qt_5_12_0_clang_64bit-Debug/433UI.app/Contents/MacOS/
+   cp ./bin/decrypt ../QtCreator/build-433UI-Desktop_Qt_5_12_0_clang_64bit-Debug/433UI.app/Contents/MacOS/
+fi
+echo "updating UI"
+cd UI
+./updateUI
+
+cd ..
+#./install
+echo "updates complete"

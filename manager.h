@@ -38,13 +38,14 @@ void Manager::Encrypt(std::string toEncrypt)
 	fprintf(stderr, "key in manager is %p\n", &key);
     oddOrEvenFlag = (key[0] - '0') - 32;
 	std::cerr << "writing key to file" << std::endl;
-    std::ofstream keyFile;
+/*    std::ofstream keyFile;
     keyFile.open("secretkey.txt");
 	std::cerr << "opened" << std::endl;
 	fprintf(stderr, "keyFile ptr is %p\n", &keyFile);
     keyFile << key;
 	std::cerr << "added" << std::endl;
-    keyFile.close();
+    keyFile.close();*/
+	std::cout << key;
 	std::cerr << "end of encryption" << std::endl;
 }
 
@@ -89,14 +90,14 @@ void Manager::Decrypt(const char *vtkfile)
     double vectorColorBuffer[triangles.size()][3];
     for (int i = 0; i < triangles.size(); i++)
     {
-       printf("Received the following colors for triangle %d\n", i);
-       printf("%f\n%f\n%f\n", triangles[i].colors[0][0], triangles[i].colors[0][1], triangles[i].colors[0][2]);
-       printf("%f\n%f\n%f\n", triangles[i].colors[1][0], triangles[i].colors[1][1], triangles[i].colors[1][2]);
-       printf("%f\n%f\n%f\n", triangles[i].colors[2][0], triangles[i].colors[2][1], triangles[i].colors[2][2]);
+       fprintf(stderr, "Received the following colors for triangle %d\n", i);
+       fprintf(stderr, "%f\n%f\n%f\n", triangles[i].colors[0][0], triangles[i].colors[0][1], triangles[i].colors[0][2]);
+       fprintf(stderr, "%f\n%f\n%f\n", triangles[i].colors[1][0], triangles[i].colors[1][1], triangles[i].colors[1][2]);
+       fprintf(stderr, "%f\n%f\n%f\n", triangles[i].colors[2][0], triangles[i].colors[2][1], triangles[i].colors[2][2]);
     }
 
     Decrypter decrypt(key);
-    decrypt.Decrypt(triangles, key);
+    std::cout << decrypt.Decrypt(triangles, key);
 }
 
 void Manager::WriteKey()

@@ -33,9 +33,13 @@ private slots:
 
     void on_StartDecryption_clicked();
 
+    void on_viewButton_clicked();
+
 private:
     Ui::MainWindow *ui;
-    std::string filename;
+    QString filenameQS;
+    const QString vtk = ".vtk";
+    std::string fn_png;
 };
 
 #endif // MAINWINDOW_H
