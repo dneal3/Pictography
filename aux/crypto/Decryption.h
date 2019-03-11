@@ -29,6 +29,36 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
 		std::cerr << "no key input detected. Exiting to avoid crash." << std::endl;
 		return std::string();	//caller checks for empty string on other end
 	}
+
+        int numColors = 9*tris.size();
+        double shiftedColors[numColors];
+
+        printf("\n\n");
+
+        // Put triangle colors into array
+        for (int i = 0; i < tris.size(); i++)
+        {
+                shiftedColors[i*9 + 0] = tris[i].colors[0][0];
+                shiftedColors[i*9 + 1] = tris[i].colors[0][1];
+                shiftedColors[i*9 + 2] = tris[i].colors[0][2];
+                shiftedColors[i*9 + 3] = tris[i].colors[1][0];
+                shiftedColors[i*9 + 4] = tris[i].colors[1][1];
+                shiftedColors[i*9 + 5] = tris[i].colors[1][2];
+                shiftedColors[i*9 + 6] = tris[i].colors[2][0];
+                shiftedColors[i*9 + 7] = tris[i].colors[2][1];
+                shiftedColors[i*9 + 8] = tris[i].colors[2][2];
+        }
+
+        for (int i = 0; i < numColors; i++)
+        {
+            shiftedColors[i] = shiftedColors[i] * 255 - key[i%127];
+            printf("shiftedColors[%d] = %f\n", i, shiftedColors[i]);
+        }
+
+        for (int i = 0; i < tris.size(); i++)
+        {
+        }
+
 	int trisSize, i, i2, colorPositions[9];
 	double charSum;
 	std::string toRet = "";
