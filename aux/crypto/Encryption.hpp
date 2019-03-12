@@ -167,9 +167,8 @@ std::vector<double>  Encryption::doEncryption()
     plainHash = hashPlain(dataToEncrypt);
     Factorize();
     RearrangePlain();
-    
+    std::cout << dataToEncrypt << std::endl;
     int numColors = numChars * 3;
-//std::cerr<< "numColors: " << numColors << std::endl; 
     std::vector<double> newColors(numColors);
     
     int c = 0;
@@ -187,11 +186,11 @@ std::vector<double>  Encryption::doEncryption()
     {
         for(int i = 0; i < numChars; i+=3)
         {
+            // is even
             // 0  1  2  3  4  5  6  7  8
             // R1 R2 R3 G3 G1 G2 B2 B3 B1
             int colorindex = c * 9;
-//           std::cerr << "colorindex: " << colorindex << std::endl; 
-//           std::cerr << "colorindex+7: " << colorindex+7 << std::endl; 
+ 
             newColors[colorindex] =   (dataToEncrypt[i]) * ratior;
             newColors[colorindex+4] = (dataToEncrypt[i]) * ratiog;
             newColors[colorindex+8] = (dataToEncrypt[i]) * ratiob;
@@ -211,12 +210,11 @@ std::vector<double>  Encryption::doEncryption()
     {
         for(int i = 0; i < numChars; i+=3)
         {
+            // is odd
             // 0  1  2  3  4  5  6  7  8
             // R2 R3 R1 G1 G2 G3 B3 B1 B2
             int colorindex = c * 9;
             
-//           std::cerr << "colorindex: " << colorindex << std::endl; 
-//           std::cerr << "colorindex+7: " << colorindex+7 << std::endl; 
             newColors[colorindex+2] = (dataToEncrypt[i]) * ratior;
             newColors[colorindex+3] = (dataToEncrypt[i]) * ratiog;
             newColors[colorindex+7] = (dataToEncrypt[i]) * ratiob;
@@ -258,7 +256,6 @@ std::vector<double>  Encryption::doEncryption()
         for(int j = 0; j<columns; j++)
         {
             index = (i)+(rows*j);
-//	std::cerr << "index during shifting: " << index << std::endl;
             shiftedColors[c] =  newColors[index];
             c++;
         }
@@ -267,7 +264,6 @@ std::vector<double>  Encryption::doEncryption()
     
     for(int i = 0; i<numColors; i++)
     {
-        printf("shiftedColors[%d] = %f\n", i, shiftedColors[i]);
         shiftedColors[i] = ((shiftedColors[i] + (key[(i%127)]))/255);
     }
 
