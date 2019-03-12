@@ -14,14 +14,14 @@ class Manager
 {
    public:
       std::vector<double> colors;
+      std::vector<Triangle> triangles;
       std::string key;
       int numColors;
       int oddOrEvenFlag;
       void Encrypt(std::string toEncrypt);
-      void Decrypt(const char *vtkfile);
+      void Decrypt();
       void WriteData(const char *vtkfile, const char *image);
       void ReadData(const char *vtkfile, const char *key);
-      void WriteKey();
 };
 
 void Manager::Encrypt(std::string toEncrypt)
@@ -31,18 +31,14 @@ void Manager::Encrypt(std::string toEncrypt)
 
     // Get the variables of the Manager object
     colors = encrypt.doEncryption();
-	int count = 0;
-	int tempIndex = 0;
-	numColors = colors.size();
+    numColors = colors.size();
     key = encrypt.getKey();
     oddOrEvenFlag = (key[0] - '0') - 32;
-	std::cout << key;
-	std::cerr << "end of encryption" << std::endl;
+    std::cout << key;	//key is returned to UI via std::cout. Qt runs process in virtual environment, this is not printed anywhere
 }
 
 void Manager::WriteData(const char *vtkfile, const char *image)
 {
-	fprintf(stderr, "vtkfile is%p, image is%p\n", vtkfile, image);
     // This class writes encrypted message into a .vtk file
     DataWriter writer;
 	const int numberOfTriangles = numColors/9;
@@ -54,14 +50,6 @@ void Manager::WriteData(const char *vtkfile, const char *image)
 	double tempSpacing = spacingTop;
 	int tempCtr = 0;
 
-	fprintf(stderr, "number of tris %d\n", numberOfTriangles);
-	fprintf(stderr, "number of top points %d\n", numPointsTop);
-	fprintf(stderr, "number of bottom points %d\n", numPointsBottom);
-	fprintf(stderr, "spacing of top %f\n", spacingTop);
-	fprintf(stderr, "spacing of bottom %f\n", spacingBottom);
-
-    // Put doubles into vector for colors
-	std::cerr << "number of colors " << numColors << std::endl;
     // Put doubles into vector for vertices
     std::vector<std::pair<double, double>> vectorPoints(numColors/3);
     vectorPoints[0] = {0, 0};
@@ -77,45 +65,22 @@ void Manager::WriteData(const char *vtkfile, const char *image)
     }   
 
     // Write data to output file
-	std::cerr << "beginning to write data " << std::endl;
     writer.write(colors, vectorPoints, vtkfile);
-	std::cerr << "written all data " << std::endl;
-
     std::vector<Triangle> temp = DataReader::Read(vtkfile);
     ImageManager::CreateImage(temp, image);
-	std::cerr << "end of write data" << std::endl;
 }
 
 void Manager::ReadData(const char *vtkfile, const char *key)
 {
-    std::vector<Triangle> temp = DataReader::Read(vtkfile);
+    triangles = DataReader::Read(vtkfile);
     this->key = key; 
 }
 
-void Manager::Decrypt(const char *vtkfile)
+void Manager::Decrypt()
 {
-    std::vector<Triangle> triangles = DataReader::Read(vtkfile);
-
-    double vectorColorBuffer[triangles.size()][3];
-    for (int i = 0; i < triangles.size(); i++)
-    {
-       fprintf(stderr, "Received the following colors for triangle %d\n", i);
-       fprintf(stderr, "%f\n%f\n%f\n", triangles[i].colors[0][0], triangles[i].colors[0][1], triangles[i].colors[0][2]);
-       fprintf(stderr, "%f\n%f\n%f\n", triangles[i].colors[1][0], triangles[i].colors[1][1], triangles[i].colors[1][2]);
-       fprintf(stderr, "%f\n%f\n%f\n", triangles[i].colors[2][0], triangles[i].colors[2][1], triangles[i].colors[2][2]);
-    }
-
+    //std::vector<Triangle> triangles = DataReader::Read(vtkfile);
     Decrypter decrypt(key);
-    std::cout << decrypt.Decrypt(triangles, key);
-}
-
-void Manager::WriteKey()
-{
-	std::cerr << "in write key" << std::endl;
-//   std::ofstream keyFile;
-//   keyFile.open("secretkey.txt");
-//   keyFile << key;
-//   keyFile.close();
+    std::cout << decrypt.Decrypt(triangles);	//decrypted string is returned to the UI via std::cout. This is run in a virtual environment, so this is not printed anywhere.
 }
 
 #endif

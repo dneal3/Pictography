@@ -26,15 +26,16 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
 {
 	if(this->key.empty())
 	{
-		std::cerr << "no key input detected. Exiting to avoid crash." << std::endl;
-		return std::string();	//caller checks for empty string on other end
+		std::string errMsg =  std::string("no key input detected. Exiting to avoid crash.");
+		return errMsg;
 	}
 
     int numColors = 9*tris.size();
     double shiftedColors[numColors];
 
     // Put triangle colors into array
-    for (int i = 0; i < tris.size(); i++)
+    int trisSize = tris.size();
+    for (int i = 0; i < trisSize; i++)
     {
             shiftedColors[i*9 + 0] = tris[i].colors[0][0];
             shiftedColors[i*9 + 1] = tris[i].colors[0][1];
@@ -181,11 +182,6 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
             decryptedString += toRet[encryptedIndex];
         }
     }
-    
-    std::hash<std::string> hashPlain;
-    size_t tempHash;
-    
-    tempHash = hashPlain(decryptedString);
     
     return decryptedString;
 }

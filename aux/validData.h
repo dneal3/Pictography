@@ -1,3 +1,6 @@
+#ifndef VALIDATEDATA_H
+#define VALIDATEDATA_H
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +21,7 @@ class ValidData
 
    private:
       std::string data;
-      int max_chars = 1024;
+      int max_chars = 999;
       int min_chars = 1;
       int max_ascii = 126;
       int min_ascii = 32;
@@ -59,3 +62,4 @@ bool ValidData::ValidateData()
 
    return true;
 }
+#endif

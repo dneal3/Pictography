@@ -19,7 +19,6 @@ class DataReader
 std::vector<Triangle> DataReader::read(std::string filename)
 {
 	int numCells, i;
-	int hash = 0;
 	double *pt = NULL;
 	std::vector<Triangle> tris;
 	vtkIdType npts, *ptIds;
@@ -35,10 +34,6 @@ std::vector<Triangle> DataReader::read(std::string filename)
 		vtkPoints *pts = data->GetPoints();
 		vtkCellArray *cells = data->GetPolys();
 		vtkDoubleArray *colors = (vtkDoubleArray *)data->GetFieldData()->GetArray("COLORS");
-		//vtkDoubleArray *hashArray = (vtkDoubleArray *)data->GetFieldData()->GetArray("HASH");
-		//hash = hashArray->GetComponent(0, 1);
-		//cerr << "hash value read is: " << hash << endl;
-		//cerr << "points: " << endl;
 		for(i =0, cells->InitTraversal(); cells->GetNextCell(npts, ptIds); i++)
 		{
 			if(npts != 3){myErr.SetErr(NONTRIANGLEFOUND);}
@@ -49,8 +44,7 @@ std::vector<Triangle> DataReader::read(std::string filename)
 			tris[i].colors[0][0] = colors->GetComponent(3*i, 0);
 			tris[i].colors[0][1] = colors->GetComponent(3*i, 1);
 			tris[i].colors[0][2] = colors->GetComponent(3*i, 2);
-		//	cerr << "(" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << endl;
-		//	cerr << "(" << tris[i].X[0] << ", " << tris[i].Y[0] << ", " << tris[i].Z[0] << ")" << endl;
+		
 			pt = pts->GetPoint(ptIds[1]);
 			tris[i].X[1] = pt[0];
 			tris[i].Y[1] = pt[1];
@@ -58,8 +52,7 @@ std::vector<Triangle> DataReader::read(std::string filename)
 			tris[i].colors[1][0] = colors->GetComponent(3*i+1, 0);
 			tris[i].colors[1][1] = colors->GetComponent(3*i+1, 1);
 			tris[i].colors[1][2] = colors->GetComponent(3*i+1, 2);
-		//	cerr << "(" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << endl;
-		//	cerr << "(" << tris[i].X[1] << ", " << tris[i].Y[1] << ", " << tris[i].Z[1] << ")" << endl;
+
 			pt = pts->GetPoint(ptIds[2]);
 			tris[i].X[2] = pt[0];
 			tris[i].Y[2] = pt[1];
@@ -67,17 +60,6 @@ std::vector<Triangle> DataReader::read(std::string filename)
 			tris[i].colors[2][0] = colors->GetComponent(3*i+2, 0);
 			tris[i].colors[2][1] = colors->GetComponent(3*i+2, 1);
 			tris[i].colors[2][2] = colors->GetComponent(3*i+2, 2);
-	/*		cerr << "(" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << endl;
-			cerr << "(" << tris[i].X[2] << ", " << tris[i].Y[2] << ", " << tris[i].Z[2] << ")" << endl; */
-			/*cerr << colors->GetComponent(0, 3*i  ) << endl;
-			cerr << colors->GetComponent(0, 3*i+1) << endl;
-			cerr << colors->GetComponent(0, 3*i+2) << endl;
-			cerr << colors->GetComponent(0, 3*i+3) << endl;
-			cerr << colors->GetComponent(0, 3*i+4) << endl;
-			cerr << colors->GetComponent(0, 3*i+5) << endl;
-			cerr << colors->GetComponent(0, 3*i+6) << endl;
-			cerr << colors->GetComponent(0, 3*i+7) << endl;
-			cerr << colors->GetComponent(0, 3*i+8) << endl;*/
 		}
 	}
 	catch(invalidData e)

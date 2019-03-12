@@ -1,3 +1,0 @@
-cmake -DCMAKE_BUILD_TYPE=Debug . ; 
-make ;
-./encrypt.app/Contents/MacOS/encrypt file.vtk image

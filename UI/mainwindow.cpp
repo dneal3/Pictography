@@ -88,30 +88,27 @@ void MainWindow::on_StartEncryption_clicked()
     ValidData valididater(tempStr.toStdString());
     if(!valididater.ValidateData())
     {
-        ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText("Input text was invalid, too long for encryption");
+        QString tempSize = QString::number(tempStr.size());
+        QString errMsg = "Max character length: 999 Current length: "+tempSize;
+        ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText(errMsg);
         return ;
     }
     QString fn_vtk = filenameQS+vtk;
     QProcess *encryptProcess = new QProcess;
     QStringList args;
-    args << fn_vtk << filenameQS << tempStr; //<< "~/Desktop/cis/433/encryptionProj/CIS433Project"
+    args << fn_vtk << filenameQS << tempStr;
     encryptProcess->setProgram("encrypt");
     encryptProcess->setArguments(args);
     encryptProcess->setEnvironment(QProcess::systemEnvironment());
     encryptProcess->start();
 
     encryptProcess->waitForStarted();
-    std::cerr << "started" << std::endl;
     encryptProcess->waitForFinished();
-    std::cerr << "finished" << std::endl;
     encryptProcess->closeWriteChannel();
     encryptProcess->waitForReadyRead();
     QByteArray out= encryptProcess->readAllStandardOutput();
     QProcess::ProcessError err = encryptProcess->error();
-    std::cerr << err << std::endl;
-    std::cerr <<  "output is \"" << out.toStdString() << "\""<< std::endl;
     QString outErr= encryptProcess->readAllStandardError();
-    std::cerr <<  "error output is \"" << outErr.toStdString() << "\""<< std::endl;
     if(err != 5)
     {
         ui->EncryptionMenu->findChild<QLabel *>("ProgressLog")->setText("An Error seems to have occured! Please re-encrypt");
@@ -164,29 +161,23 @@ void MainWindow::on_StartDecryption_clicked()
         ui->DecryptionMenu->findChild<QLabel *>("ProgressLog_Decrypt")->setText("Input key before running");
         return ;
     }
-    //TODO show decrypted string to person
 
     QString fn_vtk = tempStr+vtk;
     QProcess *decryptProcess = new QProcess;
     QStringList args;
-    args << fn_vtk << tempStr << key; //<< "~/Desktop/cis/433/encryptionProj/CIS433Project"
+    args << fn_vtk << key;
     decryptProcess->setProgram("decrypt");
     decryptProcess->setArguments(args);
     decryptProcess->setEnvironment(QProcess::systemEnvironment());
     decryptProcess->start();
 
     decryptProcess->waitForStarted();
-    std::cerr << "started" << std::endl;
     decryptProcess->waitForFinished();
-    std::cerr << "finished" << std::endl;
     decryptProcess->closeWriteChannel();
     decryptProcess->waitForReadyRead();
     QByteArray out= decryptProcess->readAllStandardOutput();
     QProcess::ProcessError err = decryptProcess->error();
-    std::cerr << err << std::endl;
-    std::cerr <<  "output is \"" << out.toStdString() << "\""<< std::endl;
     QString outErr= decryptProcess->readAllStandardError();
-    std::cerr <<  "error output is \"" << outErr.toStdString() << "\""<< std::endl;
     if(err != 5)
     {
         ui->EncryptionMenu->findChild<QLabel *>("ProgressLog_Decrypt")->setText("An Error seems to have occured! Please re-decrypt");
@@ -206,6 +197,5 @@ void MainWindow::on_StartDecryption_clicked()
 void MainWindow::on_viewButton_clicked()
 {
     std::string sysCall = "open " + fn_png;
-    std::cerr << "opening " << sysCall << std::endl;
     system(sysCall.c_str());
 }

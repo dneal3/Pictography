@@ -1,5 +1,5 @@
 #! /bin/bash
-# updates the bin directory to the most recent encrypt and decrypt files
+# updates the bin directory to the most recent encrypt, decrypt, and UI files
 cmake .
 make
 echo "updating decrypt"
@@ -15,7 +15,8 @@ fi
 echo "updating UI"
 cd UI
 ./updateUI
-
+echo "cleaning up CMake reminants"
 cd ..
-#./install
+rm CMakeCache.txt Makefile cmake_install.cmake
+rm -Rf CMakeFiles/ decrypt.app/ encrypt.app/
 echo "updates complete"

@@ -11,7 +11,6 @@
 class Encryption
 {
     std::string key;
-    size_t plainHash;
     int rearrFactors[2];
     int numTriFactors[2];
     std::string dataToEncrypt;
@@ -25,7 +24,6 @@ class Encryption
         Encryption(std::string data);
         std::vector<double> doEncryption();
         std::string getKey() {return key;};
-	int getHash(){return (int)plainHash;}
         int* getFactors() {return rearrFactors;};
     
 };
@@ -157,14 +155,12 @@ std::vector<double>  Encryption::doEncryption()
 {
     srand(time(0));
     int numChars = dataToEncrypt.size();
-    std::hash<std::string> hashPlain;
     while(numChars % 9 != 0)
     {
         numChars++;
         dataToEncrypt += ' ';
     }
     
-    plainHash = hashPlain(dataToEncrypt);
     Factorize();
     RearrangePlain();
     int numColors = numChars * 3;

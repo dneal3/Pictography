@@ -4,6 +4,7 @@ echo "directory installed from is: $installDir"
 echo "NOTE: if an error occurs, please make sure this is the directory that contains the project files"
 echo ""
 
+./update
 cd ~
 if [ -d "pictography" ]; then
     echo "pictography already exists, skipping creation"
