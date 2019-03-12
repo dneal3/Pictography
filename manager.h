@@ -48,7 +48,7 @@ void Manager::WriteData(const char *vtkfile, const char *image)
 	const int numberOfTriangles = numColors/9;
 	const int numPoints = floor(numberOfTriangles/2.0);
 	const int numPointsTop      = numPoints;
-	const int numPointsBottom   = numPoints+1;
+	const int numPointsBottom   =  numberOfTriangles%2 == 0 ? numPoints : numPoints+1;
 	const double spacingTop = 1000/numPointsTop;
 	const double spacingBottom = 1000/numPointsBottom;
 	double tempSpacing = spacingTop;
