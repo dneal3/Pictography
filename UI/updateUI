@@ -1,0 +1,5 @@
+#! /bin/bash
+if [ -d ~/Desktop/cis/433/encryptionProj/QtCreator/build-433UI-Desktop_Qt_5_12_0_clang_64bit-Debug/433UI.app/Contents/MacOS/ ]; then
+cp ~/Desktop/cis/433/encryptionProj/QtCreator/build-433UI-Desktop_Qt_5_12_0_clang_64bit-Debug/433UI.app/Contents/MacOS/433UI .
+echo "UI executable updated"
+fi

@@ -1,0 +1,43 @@
+#! /bin/bash
+installDir=$(pwd)
+echo "directory installed from is: $installDir"
+echo "NOTE: if an error occurs, please make sure this is the directory that contains the project files"
+echo ""
+
+cd ~
+if [ -d "pictography" ]; then
+    echo "pictography already exists, skipping creation"
+else 
+    echo "creating ~/pictography"
+    mkdir "pictography"
+fi
+cd "pictography"
+
+echo "installing binary executables"
+if [ -f "encrypt" ]; then
+    echo "updating encrypt"
+    rm encrypt 
+fi
+if [ -f "decrypt" ]; then
+    echo "updating decrypt"
+    rm decrypt 
+fi
+if [ -f "433UI" ]; then
+    echo "updating UI"
+    rm 433UI
+fi
+
+
+
+cp $installDir/bin/encrypt .
+cp $installDir/bin/decrypt .
+cp $installDir/UI/433UI .
+
+echo "adding run script"
+cp $installDir/runPicto .
+
+echo "installation was successful!"
+echo "to start using pictography, please run:"
+echo "~/pictography/runPicto"
+echo ""
+echo "PLEASE NOTE: Only run pictography through the script runPicto. Behavior is undefined if this is not done."

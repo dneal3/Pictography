@@ -4,9 +4,10 @@ int main(int argc, char* argv[])
 {
     // Create a manager for the program
     Manager manager;
-
+    std::string toEncrypt(argv[3]);
     // Encrypt a message
-    manager.Encrypt("Hel");
+	std::cerr << "encrypting:\n" << toEncrypt << std::endl;
+    manager.Encrypt(toEncrypt);
 
     // Write data to .vtk file
 	std::cerr << "argv[1] is " << argv[1] << std::endl;
