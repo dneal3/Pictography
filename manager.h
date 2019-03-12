@@ -8,6 +8,7 @@
 #include "aux/imageCreation/ImageManager.h"
 
 #include <iostream>
+#include <math.h>
 #include <fstream>
 class Manager
 {
@@ -33,18 +34,8 @@ void Manager::Encrypt(std::string toEncrypt)
 	int count = 0;
 	int tempIndex = 0;
 	numColors = colors.size();
-	std::cerr << "after encryption" << std::endl;
     key = encrypt.getKey();
-	fprintf(stderr, "key in manager is %p\n", &key);
     oddOrEvenFlag = (key[0] - '0') - 32;
-	std::cerr << "writing key to file" << std::endl;
-/*    std::ofstream keyFile;
-    keyFile.open("secretkey.txt");
-	std::cerr << "opened" << std::endl;
-	fprintf(stderr, "keyFile ptr is %p\n", &keyFile);
-    keyFile << key;
-	std::cerr << "added" << std::endl;
-    keyFile.close();*/
 	std::cout << key;
 	std::cerr << "end of encryption" << std::endl;
 }
@@ -54,17 +45,35 @@ void Manager::WriteData(const char *vtkfile, const char *image)
 	fprintf(stderr, "vtkfile is%p, image is%p\n", vtkfile, image);
     // This class writes encrypted message into a .vtk file
     DataWriter writer;
+	const int numberOfTriangles = numColors/9;
+	const int numPoints = floor(numberOfTriangles/2.0);
+	const int numPointsTop      = numPoints;
+	const int numPointsBottom   = numPoints+1;
+	const double spacingTop = 1000/numPointsTop;
+	const double spacingBottom = 1000/numPointsBottom;
+	double tempSpacing = spacingTop;
+	int tempCtr = 0;
+
+	fprintf(stderr, "number of tris %d\n", numberOfTriangles);
+	fprintf(stderr, "number of top points %d\n", numPointsTop);
+	fprintf(stderr, "number of bottom points %d\n", numPointsBottom);
+	fprintf(stderr, "spacing of top %f\n", spacingTop);
+	fprintf(stderr, "spacing of bottom %f\n", spacingBottom);
 
     // Put doubles into vector for colors
 	std::cerr << "number of colors " << numColors << std::endl;
     // Put doubles into vector for vertices
     std::vector<std::pair<double, double>> vectorPoints(numColors/3);
-    vectorPoints[0] = {50,50};
-    for (int i = 1; i < (numColors/3); i+=3)
+    vectorPoints[0] = {0, 0};
+    vectorPoints[1] = {1000, 0};
+    vectorPoints[2] = {0, spacingBottom};
+    for (int i = 3; i < (numColors/3); i+=3)
     {   
-       vectorPoints[i  ] = { vectorPoints[i-1].first   , vectorPoints[i-1].second + 50};
-       vectorPoints[i+1] = { vectorPoints[i-1].first-50, vectorPoints[i-1].second + 50};
-       vectorPoints[i+2] = { vectorPoints[i-1].first+50, vectorPoints[i-1].second + 50};
+	tempSpacing = tempCtr%2 == 0 ? spacingTop : spacingBottom;
+       vectorPoints[i  ] = { vectorPoints[i-2].first, vectorPoints[i-2].second};
+       vectorPoints[i+1] = { vectorPoints[i-1].first, vectorPoints[i-1].second};
+       vectorPoints[i+2] = { vectorPoints[i-2].first, vectorPoints[i-2].second+tempSpacing};
+	tempCtr++;
     }   
 
     // Write data to output file
