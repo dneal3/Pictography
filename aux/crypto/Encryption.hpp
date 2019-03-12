@@ -167,7 +167,6 @@ std::vector<double>  Encryption::doEncryption()
     plainHash = hashPlain(dataToEncrypt);
     Factorize();
     RearrangePlain();
-    std::cout << dataToEncrypt << std::endl;
     int numColors = numChars * 3;
     std::vector<double> newColors(numColors);
     
@@ -267,12 +266,6 @@ std::vector<double>  Encryption::doEncryption()
         shiftedColors[i] = ((shiftedColors[i] + (key[(i%127)]))/255);
     }
 
-    std::vector<double> unshiftedColors(numColors);
-
-    for (int i = 0; i < numColors; i++)
-    {
-        unshiftedColors[i] = shiftedColors[i] * 255 - key[i%127];
-    }
 
     return shiftedColors;
 }

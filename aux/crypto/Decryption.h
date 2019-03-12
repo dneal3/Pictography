@@ -50,13 +50,12 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
     for (int i = 0; i < numColors; i++)
     {
         shiftedColors[i] = (shiftedColors[i] * 255) - key[i%127];
-        //printf("shiftedColors[%d] = %f\n", i, shiftedColors[i]);
     }
     
     int rows;
     int cols;
-    std::string n1;
-    std::string n2;
+    std::string n1 = "";
+    std::string n2 = "";
     
     //extract first factor
     n1 += key[122];
@@ -86,7 +85,7 @@ std::string Decrypter::Decrypt(std::vector<Triangle> tris)
         }
     }
     
-    std::string tempOdd;
+    std::string tempOdd = "";
     tempOdd += key[0];
     int isOdd = std::stoi(tempOdd);
     int numTris = numColors/9;
